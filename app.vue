@@ -66,8 +66,8 @@ async function onSubmit(values) {
     body: {
       'records': [{
         'fields': {
-          'fldBNEfobFEGs': text.value,
-          'fld3Bqp5Pfkb6': tel.value,
+          'fldBNEfobFEGs': text.value, // 宠物姓名
+          'fld3Bqp5Pfkb6': tel.value, // 手机号码
         }
       }],
       'fieldKey': 'id',
