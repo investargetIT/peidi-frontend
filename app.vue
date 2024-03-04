@@ -1,11 +1,10 @@
-<script setup lang="ts">
-const version = 2 + 1
+<script setup>
 </script>
 
 <template>
-  <div class="hello">
-    Hello Nuxt {{ version }}!
-  </div>
+  <van-button type="primary" @click="showToast('toast')">button</van-button>
+  <van-button type="success" @click="showNotify('notify')">button</van-button>
+  <lazy-van-button type="default">lazy button</lazy-van-button>
 </template>
 
 <style scoped>
