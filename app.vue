@@ -10,7 +10,7 @@ const password = ref('');
 const disableFetchSmsCode = ref(false);
 
 async function send_sms_code_btn_clicked(event) {
-  const result = await $fetch('https://api.investarget.com/service/sms', {
+  const req = await $fetch('https://api.investarget.com/service/sms', {
     method: 'POST',
     headers: {
       source: 99,
@@ -19,7 +19,16 @@ async function send_sms_code_btn_clicked(event) {
       mobile: tel.value,
     },
   });
-  console.log(result);
+  console.log(req);
+  const { code, result } = req;
+  if (code != 1000) {
+    return;
+  }
+  const { status, smstoken } = result;
+  if (status != 'success') {
+    return;
+  }
+  localStorage.setItem('smstoken', smstoken);
 }
 
 function onSubmit(values) {
