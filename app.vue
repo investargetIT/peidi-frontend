@@ -6,6 +6,17 @@ const text = ref('');
 const digit = ref('');
 const number = ref('');
 const password = ref('');
+
+const disableFetchSmsCode = ref(false);
+
+function send_sms_code_btn_clicked(event) {
+  console.log('send_sms_code_btn_clicked', event);
+  console.log('tel', tel.value);
+}
+
+function onSubmit(values) {
+  console.log('onSubmit', values);
+}
 </script>
 
 <template>
@@ -17,11 +28,11 @@ const password = ref('');
   </div>
   <van-form @submit="onSubmit">
     <van-cell-group inset>
-      <van-field v-model="text" label="宠物姓名" placeholder="请输入爱宠姓名" :rules="[{ required: true, message: '请输入爱宠姓名' }]" />
-      <van-field v-model="tel" type="tel" label="手机号" placeholder="请输入手机号" :rules="[{ required: true, message: '请输入手机号' }]" />
-      <van-field v-model="digit" type="digit" label="验证码" placeholder="请输入验证码" :rules="[{ required: true, message: '请输入验证码' }]">
+      <van-field v-model="text" name="name" label="宠物姓名" placeholder="请输入爱宠姓名" :rules="[{ required: true, message: '请输入爱宠姓名' }]" />
+      <van-field v-model="tel" name="tel" type="tel" label="手机号" placeholder="请输入手机号" :rules="[{ required: true, message: '请输入手机号' }]" />
+      <van-field v-model="digit" name="sms_code" type="digit" label="验证码" placeholder="请输入验证码" :rules="[{ required: true, message: '请输入验证码' }]">
         <template #button>
-          <van-button type="primary" size="small">发送验证码</van-button>
+          <van-button type="primary" size="small" :disabled="disableFetchSmsCode" @click="send_sms_code_btn_clicked">发送验证码</van-button>
         </template>
       </van-field>
     </van-cell-group>
