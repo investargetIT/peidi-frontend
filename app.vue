@@ -31,8 +31,32 @@ async function send_sms_code_btn_clicked(event) {
   localStorage.setItem('smstoken', smstoken);
 }
 
-function onSubmit(values) {
+async function onSubmit(values) {
   console.log('onSubmit', values);
+  const smstoken = localStorage.getItem('smstoken');
+  console.log('smstoken', smstoken);
+  if (!smstoken) {
+    showNotify('请先获取验证码');
+    return;
+  }
+  const req = await $fetch('https://api.investarget.com/user/checkSms', {
+    method: 'POST',
+    headers: {
+      source: 99,
+    },
+    body: {
+      mobile: tel.value,
+      mobilecode: digit.value,
+      mobilecodetoken: smstoken,
+    },
+  });
+  console.log(req);
+  const { code, result } = req;
+  if (code != 1000) {
+    showNotify('验证失败，请输入正确的验证码');
+    return;
+  }
+  showNotify({ type: 'success', message: '验证成功' });
 }
 </script>
 
