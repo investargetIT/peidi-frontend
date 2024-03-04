@@ -56,7 +56,26 @@ async function onSubmit(values) {
     showNotify('验证失败，请输入正确的验证码');
     return;
   }
-  showNotify({ type: 'success', message: '验证成功' });
+  const req1 = await $fetch('http://39.107.14.53:8080/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer usk0DNfyg8WewOTJvi9DWgz',
+    },
+    body: {
+      'records': [{
+        'fields': {
+          'fldBNEfobFEGs': text.value,
+          'fld3Bqp5Pfkb6': tel.value,
+        }
+      }],
+      'fieldKey': 'id',
+    },
+  });
+  console.log(req1);
+  if (req1.success) {
+    showNotify({ type: 'success', message: '报名成功，感谢您的参与！' });
+  }
 }
 </script>
 
