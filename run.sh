@@ -4,4 +4,4 @@ docker run -it --rm \
 -v $(pwd):/app \
 -v /app/node_modules \
 -p 3000:3000 \
-nuxt
+peidi-frontend

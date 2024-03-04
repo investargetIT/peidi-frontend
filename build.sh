@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t nuxt .
+docker build -t peidi-frontend .
