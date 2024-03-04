@@ -29,6 +29,7 @@ async function send_sms_code_btn_clicked(event) {
     return;
   }
   localStorage.setItem('smstoken', smstoken);
+  showNotify({ type: 'success', message: '验证码发送成功，请注意查收' });
 }
 
 async function onSubmit(values) {
