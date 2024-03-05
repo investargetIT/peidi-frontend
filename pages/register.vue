@@ -70,6 +70,7 @@ async function onSubmit(values) {
           'fldBNEfobFEGs': text.value, // 宠物姓名
           'fldlK5h1BJDB3': groupChecked.value, // 宠物类别
           'fld3Bqp5Pfkb6': tel.value, // 手机号码
+          'fldE0DSztgMVz': ['深宠展2024(3.14-3.17)'], // 用户标签
         }
       }],
       'fieldKey': 'id',
@@ -78,6 +79,7 @@ async function onSubmit(values) {
   console.log(req1);
   if (req1.success) {
     showNotify({ type: 'success', message: '报名成功，感谢您的参与！' });
+    // Not working in 微信浏览器里
     setTimeout(() => window.open('https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=2206358157998&activityId=3b9dbf5e57224bf98944143cc244cb5c&toolName=shopCoupon'), 3000);
   }
 }
