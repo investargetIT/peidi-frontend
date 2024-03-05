@@ -85,10 +85,10 @@ async function onSubmit(values) {
 
 <template>
   <div style="margin: 16px;">
-    <van-row justify="center">
+    <!-- <van-row justify="center">
       <van-image width="100" height="100" fit="cover" position="center"
         src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
-    </van-row>
+    </van-row> -->
   </div>
   <van-form @submit="onSubmit">
     <van-cell-group inset>
