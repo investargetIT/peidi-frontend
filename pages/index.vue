@@ -3,6 +3,12 @@
   useSeoMeta({
     title: '😙授权😈',
   });
+  const route = useRoute();
+  console.log(route.query.code);
+  if (route.query.code) {
+    // TODO: fetch user info
+    navigateTo('/list');
+  }
 </script>
 <template>
   <div style="position: relative;">
