@@ -41,8 +41,6 @@ async function send_sms_code_btn_clicked(event) {
 }
 
 async function onSubmit(values) {
-  // navigateTo('/success');
-  // return
 
   // console.log('onSubmit', values);
   // const smstoken = localStorage.getItem('smstoken');
@@ -99,12 +97,6 @@ async function onSubmit(values) {
 </script>
 
 <template>
-  <div style="margin: 16px;">
-    <!-- <van-row justify="center">
-      <van-image width="100" height="100" fit="cover" position="center"
-        src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
-    </van-row> -->
-  </div>
   <van-form @submit="onSubmit">
     <van-cell-group inset>
       <van-field v-model="text" name="name" label="宠物姓名" placeholder="请输入爱宠姓名" :rules="[{ required: true, message: '请输入爱宠姓名' }]" />
@@ -130,8 +122,6 @@ async function onSubmit(values) {
   </van-form>
 </template>
 
-<style>
-body {
-  background-color: #eff2f5;
-}
+<style scoped>
+  body {}
 </style>
