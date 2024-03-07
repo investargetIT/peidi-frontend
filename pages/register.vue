@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 
+useSeoMeta({
+  title: '😙报名😈',
+});
+
 const tel = ref('');
 const text = ref('');
 const digit = ref('');

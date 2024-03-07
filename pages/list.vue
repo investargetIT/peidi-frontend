@@ -1,3 +1,8 @@
+<script setup>
+  useSeoMeta({
+    title: '😙列表😈',
+  });
+</script>
 <template>
   <div style="position: relative;">
     <van-image style="position: absolute;left: 0;top: 0;" width="100vw" height="100vh" fit="cover" position="center" src="/WechatIMG633.jpg" />
