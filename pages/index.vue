@@ -7,16 +7,18 @@
   console.log(route.query.code);
   if (route.query.code) {
     // TODO: fetch user info
-    navigateTo('/list');
+    navigateTo('/landing');
   }
+  const handleAuthBtnClicked = () => {
+    // navigateTo(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${runtimeConfig.public.APP_ID}&redirect_uri=${runtimeConfig.public.REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`, { external: true });
+    navigateTo('/landing');
+  };
 </script>
 <template>
   <div style="position: relative;">
     <van-image style="position: absolute;left: 0;top: 0;" width="100vw" height="100vh" fit="cover" position="center" src="/WechatIMG633.jpg" />
     <div style="position: relative;padding-top: 100px;">
-      <a :href="`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${runtimeConfig.public.APP_ID}&redirect_uri=${runtimeConfig.public.REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`">
-        <van-button style="width: 50%;margin: auto;" block type="primary">授权</van-button>
-      </a>
+      <van-button style="width: 50%;margin: auto;" block type="primary" @click="handleAuthBtnClicked">授权</van-button>
     </div>
   </div>
 </template>
