@@ -1,9 +1,16 @@
+<script setup>
+  const runtimeConfig = useRuntimeConfig();
+  useSeoMeta({
+    title: '😙授权😈',
+  });
+</script>
 <template>
   <div style="position: relative;">
     <van-image style="position: absolute;left: 0;top: 0;" width="100vw" height="100vh" fit="cover" position="center" src="/WechatIMG633.jpg" />
     <div style="position: relative;padding-top: 100px;">
-      <!-- <div style="text-align: center;margin-bottom: 20px;font-size: 24px;">点击下方，为宠物发声！</div> -->
-      <NuxtLink to="/list"><van-button style="width: 50%;margin: auto;" block type="primary">授权</van-button></NuxtLink>
+      <a :href="`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${runtimeConfig.public.APP_ID}&redirect_uri=${runtimeConfig.public.REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`">
+        <van-button style="width: 50%;margin: auto;" block type="primary">授权</van-button>
+      </a>
     </div>
   </div>
 </template>
