@@ -5,6 +5,8 @@ useSeoMeta({
   title: '😙报名😈',
 });
 
+const runtimeConfig = useRuntimeConfig();
+
 const tel = ref('');
 const text = ref('');
 const digit = ref('');
@@ -38,37 +40,39 @@ async function send_sms_code_btn_clicked(event) {
 }
 
 async function onSubmit(values) {
-  navigateTo('/success');
-  return
-  console.log('onSubmit', values);
-  const smstoken = localStorage.getItem('smstoken');
-  console.log('smstoken', smstoken);
-  if (!smstoken) {
-    showNotify('请先获取验证码');
-    return;
-  }
-  const req = await $fetch('https://api.investarget.com/user/checkSms', {
-    method: 'POST',
-    headers: {
-      source: 99,
-    },
-    body: {
-      mobile: tel.value,
-      mobilecode: digit.value,
-      mobilecodetoken: smstoken,
-    },
-  });
-  console.log(req);
-  const { code, result } = req;
-  if (code != 1000) {
-    showNotify('验证失败，请输入正确的验证码');
-    return;
-  }
-  const req1 = await $fetch('http://39.107.14.53:8080/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
+  // navigateTo('/success');
+  // return
+
+  // console.log('onSubmit', values);
+  // const smstoken = localStorage.getItem('smstoken');
+  // console.log('smstoken', smstoken);
+  // if (!smstoken) {
+  //   showNotify('请先获取验证码');
+  //   return;
+  // }
+  // const req = await $fetch('https://api.investarget.com/user/checkSms', {
+  //   method: 'POST',
+  //   headers: {
+  //     source: 99,
+  //   },
+  //   body: {
+  //     mobile: tel.value,
+  //     mobilecode: digit.value,
+  //     mobilecodetoken: smstoken,
+  //   },
+  // });
+  // console.log(req);
+  // const { code, result } = req;
+  // if (code != 1000) {
+  //   showNotify('验证失败，请输入正确的验证码');
+  //   return;
+  // }
+  
+  const req1 = await $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer usk0DNfyg8WewOTJvi9DWgz',
+      'Authorization': `Bearer ${runtimeConfig.public.APITABLE_API_TOKEN}`,
     },
     body: {
       'records': [{
@@ -84,7 +88,7 @@ async function onSubmit(values) {
   });
   console.log(req1);
   if (req1.success) {
-    showNotify({ type: 'success', message: '报名成功，感谢您的参与！' });
+    // showNotify({ type: 'success', message: '报名成功，感谢您的参与！' });
     // Not working in 微信浏览器里
     // setTimeout(() => window.open('https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=2206358157998&activityId=3b9dbf5e57224bf98944143cc244cb5c&toolName=shopCoupon'), 3000);
     navigateTo('/success');

@@ -7,6 +7,8 @@ export default defineNuxtConfig({
     public: {
       APP_ID: process.env.APP_ID,
       REDIRECT_URI: process.env.REDIRECT_URI,
+      APITABLE_URL: process.env.APITABLE_URL,
+      APITABLE_API_TOKEN: process.env.APITABLE_API_TOKEN,
     },
   },
 })

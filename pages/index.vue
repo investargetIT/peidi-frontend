@@ -1,5 +1,6 @@
 <script setup>
   const runtimeConfig = useRuntimeConfig();
+  console.log(runtimeConfig.public);
   useSeoMeta({
     title: '😙授权😈',
   });
