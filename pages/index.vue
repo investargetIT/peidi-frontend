@@ -1,18 +1,22 @@
 <script setup>
   const runtimeConfig = useRuntimeConfig();
-  console.log(runtimeConfig.public);
   useSeoMeta({
     title: '😙授权😈',
   });
   const route = useRoute();
-  console.log(route.query.code);
   if (route.query.code) {
-    // TODO: fetch user info
-    navigateTo('/landing');
+    const formData = new FormData();
+    formData.append('code', route.query.code);
+    $fetch('https://api.investarget.com/service/weixin/pduserinfo', {
+      method: 'POST',
+      body: formData,
+    }).then((res) => {
+      console.log(res);
+      navigateTo('/landing');
+    });
   }
   const handleAuthBtnClicked = () => {
     navigateTo(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${runtimeConfig.public.APP_ID}&redirect_uri=${runtimeConfig.public.REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`, { external: true });
-    // navigateTo('/landing');
   };
 </script>
 <template>
