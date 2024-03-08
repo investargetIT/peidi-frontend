@@ -103,7 +103,7 @@ async function onSubmit(values) {
 
 <template>
   <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
-  <div style="position: absolute;top: 50px; width: 100%;">
+  <div style="position: absolute;top: 100px; width: 100%;">
     <van-form @submit="onSubmit">
       <van-cell-group inset>
         <van-field v-model="text" name="name" label="宠物姓名" placeholder="请输入爱宠姓名"
