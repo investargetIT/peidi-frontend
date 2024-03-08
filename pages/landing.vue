@@ -9,7 +9,7 @@
 
 <template>
   <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
-  <div style="position: absolute;top: 50px; width: 100%;">
+  <div style="position: absolute;top: 280px; width: 100%;">
     <van-row justify="center">
       <van-image width="50" height="50" :src="user && user.headimgurl" />
     </van-row>
@@ -17,7 +17,7 @@
     <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">和小狗握爪，为它发声！</span></div>
     <van-row justify="center">
       <NuxtLink to="/register">
-        <van-image width="100" src="/paw.png" style="background-color: orange;"/>
+        <van-image width="100" src="/paw.png" />
       </NuxtLink>
     </van-row>
     <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">你是第{{ 999 }}位小狗守护者</span></div>

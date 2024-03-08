@@ -18,6 +18,9 @@ const city = ref('');
 const disableFetchSmsCode = ref(false);
 const countdown = ref(60);
 
+let user = localStorage.getItem('user');
+user = JSON.parse(user);
+
 const fetchSMSCodeCountdown = () => {
   const countdownInterval = setInterval(() => {
     if (disableFetchSmsCode.value) {
@@ -95,8 +98,6 @@ async function onSubmit(values) {
     return;
   }
   
-  let user = localStorage.getItem('user');
-  user = JSON.parse(user);
   const req1 = await $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
     method: 'POST',
     headers: {
@@ -129,8 +130,12 @@ async function onSubmit(values) {
 </script>
 
 <template>
-  <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
-  <div style="position: absolute;top: 100px; width: 100%;">
+  <van-image style="position: relative;" width="100vw" src="/bg_blur.jpg" />
+  <div style="position: absolute;top: 50px; width: 100%;">
+    <van-row justify="center">
+      <van-image width="50" height="50" :src="user && user.headimgurl" />
+    </van-row>
+    <div style="width: 80%;margin:20px auto;text-align: center;">{{ user && user.nickname }}</div>
     <van-form @submit="onSubmit">
       <van-cell-group inset>
         <van-field v-model="text" name="name" label="宠物姓名" placeholder="请输入爱宠姓名"

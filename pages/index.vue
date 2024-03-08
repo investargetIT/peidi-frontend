@@ -31,7 +31,7 @@
 
 <template>
   <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
-  <div style="position: absolute;top: 100px; width: 100%;">
-    <van-button style="width: 50%;margin: 0 auto;" block type="primary" @click="handleAuthBtnClicked">授权</van-button>
+  <div style="position: absolute;top: 500px; width: 100%;">
+    <van-button style="width: 50%;margin: 0 auto;" block color="orange" @click="handleAuthBtnClicked">授权</van-button>
   </div>
 </template>
