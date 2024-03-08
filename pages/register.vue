@@ -16,8 +16,27 @@ const groupChecked = ref([]);
 const city = ref('');
 
 const disableFetchSmsCode = ref(false);
+const countdown = ref(60);
+
+const fetchSMSCodeCountdown = () => {
+  const countdownInterval = setInterval(() => {
+    if (disableFetchSmsCode.value) {
+      countdown.value--;
+      if (countdown.value <= 0) {
+        disableFetchSmsCode.value = false;
+        countdown.value = 60;
+        countdownInterval && clearInterval(countdownInterval);
+      }
+    }
+  }, 1000);
+}
 
 async function send_sms_code_btn_clicked(event) {
+  showLoadingToast({
+    duration: 0,
+    message: '加载中...',
+    forbidClick: true,
+  });
   const req = await $fetch('https://api.investarget.com/service/sms', {
     method: 'POST',
     headers: {
@@ -27,6 +46,7 @@ async function send_sms_code_btn_clicked(event) {
       mobile: tel.value,
     },
   });
+  closeToast();
   console.log(req);
   const { code, result } = req;
   if (code != 1000) {
@@ -37,7 +57,9 @@ async function send_sms_code_btn_clicked(event) {
     return;
   }
   localStorage.setItem('smstoken', smstoken);
-  showNotify({ type: 'success', message: '验证码发送成功，请注意查收' });
+  disableFetchSmsCode.value = true;
+  fetchSMSCodeCountdown();
+  showToast('验证码发送成功，请注意查收');
 }
 
 async function onSubmit(values) {
@@ -46,9 +68,14 @@ async function onSubmit(values) {
   const smstoken = localStorage.getItem('smstoken');
   console.log('smstoken', smstoken);
   if (!smstoken) {
-    showNotify('请先获取验证码');
+    showToast('请先获取验证码');
     return;
   }
+  showLoadingToast({
+    duration: 0,
+    message: '加载中...',
+    forbidClick: true,
+  });
   const req = await $fetch('https://api.investarget.com/user/checkSms', {
     method: 'POST',
     headers: {
@@ -63,7 +90,8 @@ async function onSubmit(values) {
   console.log(req);
   const { code, result } = req;
   if (code != 1000) {
-    showNotify('验证失败，请输入正确的验证码');
+    closeToast();
+    showToast('验证失败，请输入正确的验证码');
     return;
   }
   
@@ -83,9 +111,9 @@ async function onSubmit(values) {
           'fld3Bqp5Pfkb6': tel.value, // 手机号码
           'fldE0DSztgMVz': ['深宠展2024(3.14-3.17)'], // 用户标签
           'fldeuBBZ4OyS1': city.value, // 所在城市
-          'fldBcjNrgEoh1': user.nickname, // 微信昵称
-          'fldDW1myivghv': user.headimgurl, // 微信头像
-          'fldZzdmUhkpWQ': user.unionid, // 微信unionid
+          'fldBcjNrgEoh1': user && user.nickname, // 微信昵称
+          'fldDW1myivghv': user && user.headimgurl, // 微信头像
+          'fldZzdmUhkpWQ': user && user.unionid, // 微信unionid
         }
       }],
       'fieldKey': 'id',
@@ -93,8 +121,10 @@ async function onSubmit(values) {
   });
   console.log(req1);
   if (req1.success) {
+    closeToast();
     navigateTo('/success');
   }
+  closeToast();
 }
 </script>
 
@@ -121,7 +151,7 @@ async function onSubmit(values) {
           :rules="[{ required: true, message: '请输入验证码' }]">
           <template #button>
             <van-button type="primary" size="small" :disabled="disableFetchSmsCode"
-              @click="send_sms_code_btn_clicked">发送验证码</van-button>
+              @click="send_sms_code_btn_clicked">{{ !disableFetchSmsCode ? '发送验证码' : `${countdown}秒后重试`}}</van-button>
           </template>
         </van-field>
       </van-cell-group>

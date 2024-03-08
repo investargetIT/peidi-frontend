@@ -5,12 +5,18 @@
   });
   const route = useRoute();
   if (route.query.code) {
+    showLoadingToast({
+      duration: 0,
+      message: '加载中...',
+      forbidClick: true,
+    });
     const formData = new FormData();
     formData.append('code', route.query.code);
     $fetch('https://api.investarget.com/service/weixin/pduserinfo', {
       method: 'POST',
       body: formData,
     }).then((res) => {
+      closeToast();
       console.log(res);
       if (res.code === 1000) {
         localStorage.setItem('user', JSON.stringify(res.result));
