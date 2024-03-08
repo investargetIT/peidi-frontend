@@ -21,11 +21,13 @@
 <template>
   <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
   <div style="position: absolute;top: 0; width: 100%;height: 280px;overflow: hidden;">
-    <div v-for="item in list" style="text-align: right;">
+    <div style="position: absolute;right: 0;" :class="`${list.length > 0 && 'list'}`">
+      <div v-for="item in list" style="text-align: right;">
         <div style="margin: 2px;background-color: rgba(0, 0, 0, .5);display: inline-block;padding: 4px 10px;border-radius: 14px;">
           <van-image round style="vertical-align: middle;margin-right: 4px;" width="20" :src="item.fields['微信头像']['text']" />
           <span style="color: white;vertical-align: middle;font-size: 12px;">{{ item.fields['微信昵称'] }}</span>
         </div>
+      </div>
     </div>
   </div>
   <div style="position: absolute;top: 280px; width: 100%;">
@@ -43,3 +45,18 @@
     <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">击掌1800次，佩蒂星球将开启XXX公益项目</span></div>
   </div>
 </template>
+
+<style scoped>
+  .list {
+    top: 280px;
+    animation: move 60s linear infinite;
+  }
+  @keyframes move {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(calc(-100% - 280px));
+    }
+  }
+</style>
