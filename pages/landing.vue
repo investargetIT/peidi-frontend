@@ -6,6 +6,7 @@
   user = JSON.parse(user);
   const runtimeConfig = useRuntimeConfig();
   const list = ref([]);
+  const total = ref(0);
   $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records?fields=${encodeURIComponent(['微信昵称', '微信头像'])}`, {
     headers: {
       'Authorization': `Bearer ${runtimeConfig.public.APITABLE_API_TOKEN}`,
@@ -13,6 +14,7 @@
   }).then((res) => {
     console.log(res);
     list.value = res.data.records;
+    total.value = res.data.total;
   });
 </script>
 
@@ -37,7 +39,7 @@
         <van-image width="100" src="/paw.png" />
       </NuxtLink>
     </van-row>
-    <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">你是第{{ 999 }}位小狗守护者</span></div>
+    <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">你是第{{ total + 1 }}位小狗守护者</span></div>
     <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">击掌1800次，佩蒂星球将开启XXX公益项目</span></div>
   </div>
 </template>
