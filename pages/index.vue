@@ -23,17 +23,10 @@
     // navigateTo('/landing');
   };
 </script>
+
 <template>
-  <div style="position: relative;padding-top: 100px;">
-    <van-button style="width: 50%;margin: auto;" block type="primary" @click="handleAuthBtnClicked">授权</van-button>
+  <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
+  <div style="position: absolute;top: 100px; width: 100%;">
+    <van-button style="width: 50%;margin: 0 auto;" block type="primary" @click="handleAuthBtnClicked">授权</van-button>
   </div>
 </template>
-
-<style>
-  body {
-    width: 100vw;
-    height: 100vh;
-    background: url('/WechatIMG633.jpg') no-repeat center center fixed;
-    background-size: cover;
-  }
-</style>

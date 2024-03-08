@@ -102,31 +102,35 @@ async function onSubmit(values) {
 </script>
 
 <template>
-  <van-form @submit="onSubmit">
-    <van-cell-group inset>
-      <van-field v-model="text" name="name" label="宠物姓名" placeholder="请输入爱宠姓名" :rules="[{ required: true, message: '请输入爱宠姓名' }]" />
-      <van-field name="checkboxGroup" label="宠物类别" :rules="[{ required: true, message: '请选择宠物类别' }]">
-        <template #input>
-          <van-checkbox-group v-model="groupChecked" direction="horizontal">
-            <van-checkbox name="猫" shape="square">猫</van-checkbox>
-            <van-checkbox name="狗" shape="square">狗</van-checkbox>
-          </van-checkbox-group>
-        </template>
-      </van-field>
-      <van-field v-model="city" name="city" label="所在城市" placeholder="请输入所在城市" :rules="[{ required: true, message: '请输入所在城市' }]" />
-      <van-field v-model="tel" name="tel" type="tel" label="手机号" placeholder="请输入手机号" :rules="[{ required: true, message: '请输入手机号' }]" />
-      <van-field v-model="digit" name="sms_code" type="digit" label="验证码" placeholder="请输入验证码" :rules="[{ required: true, message: '请输入验证码' }]">
-        <template #button>
-          <van-button type="primary" size="small" :disabled="disableFetchSmsCode" @click="send_sms_code_btn_clicked">发送验证码</van-button>
-        </template>
-      </van-field>
-    </van-cell-group>
-    <div style="margin: 16px;">
-      <van-button round block type="primary" native-type="submit">提交</van-button>
-    </div>
-  </van-form>
+  <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
+  <div style="position: absolute;top: 50px; width: 100%;">
+    <van-form @submit="onSubmit">
+      <van-cell-group inset>
+        <van-field v-model="text" name="name" label="宠物姓名" placeholder="请输入爱宠姓名"
+          :rules="[{ required: true, message: '请输入爱宠姓名' }]" />
+        <van-field name="checkboxGroup" label="宠物类别" :rules="[{ required: true, message: '请选择宠物类别' }]">
+          <template #input>
+            <van-checkbox-group v-model="groupChecked" direction="horizontal">
+              <van-checkbox name="猫" shape="square">猫</van-checkbox>
+              <van-checkbox name="狗" shape="square">狗</van-checkbox>
+            </van-checkbox-group>
+          </template>
+        </van-field>
+        <van-field v-model="city" name="city" label="所在城市" placeholder="请输入所在城市"
+          :rules="[{ required: true, message: '请输入所在城市' }]" />
+        <van-field v-model="tel" name="tel" type="tel" label="手机号" placeholder="请输入手机号"
+          :rules="[{ required: true, message: '请输入手机号' }]" />
+        <van-field v-model="digit" name="sms_code" type="digit" label="验证码" placeholder="请输入验证码"
+          :rules="[{ required: true, message: '请输入验证码' }]">
+          <template #button>
+            <van-button type="primary" size="small" :disabled="disableFetchSmsCode"
+              @click="send_sms_code_btn_clicked">发送验证码</van-button>
+          </template>
+        </van-field>
+      </van-cell-group>
+      <div style="margin: 16px;">
+        <van-button round block type="primary" native-type="submit">提交</van-button>
+      </div>
+    </van-form>
+  </div>
 </template>
-
-<style scoped>
-  body {}
-</style>
