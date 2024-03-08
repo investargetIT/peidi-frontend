@@ -4,11 +4,28 @@
   });
   let user = localStorage.getItem('user');
   user = JSON.parse(user);
-  console.log(user);
+  const runtimeConfig = useRuntimeConfig();
+  const list = ref([]);
+  $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records?fields=${encodeURIComponent(['微信昵称', '微信头像'])}`, {
+    headers: {
+      'Authorization': `Bearer ${runtimeConfig.public.APITABLE_API_TOKEN}`,
+    },
+  }).then((res) => {
+    console.log(res);
+    list.value = res.data.records;
+  });
 </script>
 
 <template>
   <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
+  <div style="position: absolute;top: 0; width: 100%;height: 280px;overflow: hidden;">
+    <div v-for="item in list" style="text-align: right;">
+        <div style="margin: 2px;background-color: rgba(0, 0, 0, .5);display: inline-block;padding: 4px 10px;border-radius: 14px;">
+          <van-image round style="vertical-align: middle;margin-right: 4px;" width="20" :src="item.fields['微信头像']['text']" />
+          <span style="color: white;vertical-align: middle;font-size: 12px;">{{ item.fields['微信昵称'] }}</span>
+        </div>
+    </div>
+  </div>
   <div style="position: absolute;top: 280px; width: 100%;">
     <van-row justify="center">
       <van-image width="50" height="50" :src="user && user.headimgurl" />
