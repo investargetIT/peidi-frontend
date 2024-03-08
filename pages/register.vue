@@ -67,6 +67,8 @@ async function onSubmit(values) {
   //   return;
   // }
   
+  let user = localStorage.getItem('user');
+  user = JSON.parse(user);
   const req1 = await $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
     method: 'POST',
     headers: {
@@ -81,6 +83,9 @@ async function onSubmit(values) {
           'fld3Bqp5Pfkb6': tel.value, // 手机号码
           'fldE0DSztgMVz': ['深宠展2024(3.14-3.17)'], // 用户标签
           'fldeuBBZ4OyS1': city.value, // 所在城市
+          'fldBcjNrgEoh1': user.nickname, // 微信昵称
+          'fldDW1myivghv': user.headimgurl, // 微信头像
+          'fldZzdmUhkpWQ': user.unionid, // 微信unionid
         }
       }],
       'fieldKey': 'id',
