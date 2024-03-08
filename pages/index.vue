@@ -12,12 +12,15 @@
       body: formData,
     }).then((res) => {
       console.log(res);
-      navigateTo('/landing');
+      if (res.code === 1000) {
+        localStorage.setItem('user', JSON.stringify(res.result));
+        navigateTo('/landing');
+      }
     });
   }
   const handleAuthBtnClicked = () => {
-    // navigateTo(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${runtimeConfig.public.APP_ID}&redirect_uri=${runtimeConfig.public.REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`, { external: true });
-    navigateTo('/landing');
+    navigateTo(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${runtimeConfig.public.APP_ID}&redirect_uri=${runtimeConfig.public.REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`, { external: true });
+    // navigateTo('/landing');
   };
 </script>
 <template>
