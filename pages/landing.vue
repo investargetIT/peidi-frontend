@@ -1,6 +1,6 @@
 <script setup>
   useSeoMeta({
-    title: '😙列表😈',
+    title: '😙欢迎😈',
   });
   let user = localStorage.getItem('user');
   user = JSON.parse(user);

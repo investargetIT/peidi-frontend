@@ -1,6 +1,6 @@
 <script setup>
   useSeoMeta({
-    title: '😙列表😈',
+    title: '😙感谢😈',
   });
 </script>
 
