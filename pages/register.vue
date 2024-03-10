@@ -16,20 +16,21 @@ const groupChecked = ref([]);
 const city = ref('');
 
 const show = ref(false);
-const cascaderValue = ref('');
-// 选项列表，children 代表子选项，支持多级嵌套
-const options = [
-  {
-    text: '浙江省',
-    value: '330000',
-    children: [{ text: '杭州市', value: '330100' }],
+const areaList = {
+  province_list: {
+    110000: '北京市',
+    120000: '天津市',
   },
-  {
-    text: '江苏省',
-    value: '320000',
-    children: [{ text: '南京市', value: '320100' }],
+  city_list: {
+    110100: '北京市',
+    120100: '天津市',
   },
-];
+  county_list: {
+    110101: '东城区',
+    110102: '西城区',
+    // ....
+  },
+};
 // 全部选项选择完毕后，会触发 finish 事件
 const onFinish = ({ selectedOptions }) => {
   show.value = false;
@@ -172,8 +173,7 @@ async function onSubmit(values) {
 
         <van-field v-model="city" is-link readonly label="所在城市" placeholder="请选择所在城市" :rules="[{ required: true, message: '请选择所在城市' }]" @click="show = true" />
         <van-popup v-model:show="show" round position="bottom">
-          <van-cascader v-model="cascaderValue" title="请选择所在城市" :options="options" @close="show = false"
-            @finish="onFinish" />
+          <van-area title="所在城市" :area-list="areaList" @cancel="show = false" @confirm="onFinish" />
         </van-popup>
 
         <van-field v-model="tel" name="tel" type="tel" label="手机号" placeholder="请输入手机号"
