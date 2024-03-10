@@ -34,7 +34,14 @@
 
 <template>
   <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
-  <div style="position: absolute;top: 500px; width: 100%;">
-    <van-button style="width: 50%;margin: 0 auto;" block color="orange" @click="handleAuthBtnClicked">授权</van-button>
+  <div style="position: absolute;top: 300px; width: 100%;">
+    <div style="width: 90%;margin:20px auto;background-color: rgba(255, 255, 255, .8);padding: 6px;border-radius: 4px;">
+      <div>佩蒂智创宠物科技有限公司申请获得您的公开信息（昵称、头像等）用于以下作用：</div>
+      <div style="color: gray;font-size: 14px;padding-left: 4px;">
+        <div>• 购买商品（待修改）</div>
+        <div>• 查询已购买商品列表（待修改）</div>
+      </div>
+    </div>
+    <van-button style="width: 50%;margin: 0 auto;" block color="orange" @click="handleAuthBtnClicked">立即授权</van-button>
   </div>
 </template>
