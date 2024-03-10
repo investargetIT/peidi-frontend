@@ -1,4 +1,7 @@
 <script setup>
+  if (localStorage.getItem('data')) {
+    navigateTo('/success');
+  }
   const runtimeConfig = useRuntimeConfig();
   useSeoMeta({
     title: '😙授权😈',

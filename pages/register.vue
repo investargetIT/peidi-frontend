@@ -129,6 +129,7 @@ async function onSubmit(values) {
   });
   console.log(req1);
   if (req1.success) {
+    localStorage.setItem('data', JSON.stringify(req1.data));
     closeToast();
     navigateTo('/success');
   }
