@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { areaList } from '@vant/area-data';
 
 useSeoMeta({
   title: '😙发声😈',
@@ -13,25 +14,9 @@ const digit = ref('');
 const number = ref('');
 const password = ref('');
 const groupChecked = ref([]);
-const city = ref('');
 
+const city = ref('');
 const show = ref(false);
-const areaList = {
-  province_list: {
-    110000: '北京市',
-    120000: '天津市',
-  },
-  city_list: {
-    110100: '北京市',
-    120100: '天津市',
-  },
-  county_list: {
-    110101: '东城区',
-    110102: '西城区',
-    // ....
-  },
-};
-// 全部选项选择完毕后，会触发 finish 事件
 const onFinish = ({ selectedOptions }) => {
   show.value = false;
   city.value = selectedOptions.map((option) => option.text).join('/');
@@ -173,7 +158,7 @@ async function onSubmit(values) {
 
         <van-field v-model="city" is-link readonly label="所在城市" placeholder="请选择所在城市" :rules="[{ required: true, message: '请选择所在城市' }]" @click="show = true" />
         <van-popup v-model:show="show" round position="bottom">
-          <van-area title="所在城市" :area-list="areaList" @cancel="show = false" @confirm="onFinish" />
+          <van-area title="所在城市" :area-list="areaList" :columns-num="2" @cancel="show = false" @confirm="onFinish" />
         </van-popup>
 
         <van-field v-model="tel" name="tel" type="tel" label="手机号" placeholder="请输入手机号"

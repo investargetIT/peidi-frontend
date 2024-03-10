@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@vant/area-data": "^1.5.1",
     "@vant/nuxt": "^1.0.4",
     "nuxt": "^3.10.3",
     "vant": "^4.8.5",
