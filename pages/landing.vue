@@ -7,13 +7,13 @@
   const runtimeConfig = useRuntimeConfig();
   const list = ref([]);
   const total = ref(0);
-  $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records?fields=${encodeURIComponent(['微信昵称', '微信头像'])}`, {
+  $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records?fields=${encodeURIComponent(['fldBcjNrgEoh1', 'fldDW1myivghv'])}&fieldKey=id`, {
     headers: {
       'Authorization': `Bearer ${runtimeConfig.public.APITABLE_API_TOKEN}`,
     },
   }).then((res) => {
     console.log(res);
-    list.value = res.data.records;
+    list.value = res.data.records.filter(f => f.fields.fldDW1myivghv);
     total.value = res.data.total;
   });
 </script>
@@ -24,8 +24,8 @@
     <div style="position: absolute;right: 0;" :class="`${list.length > 0 && 'list'}`">
       <div v-for="item in list" style="text-align: right;">
         <div style="margin: 2px;background-color: rgba(0, 0, 0, .5);display: inline-block;padding: 4px 10px;border-radius: 14px;">
-          <van-image round style="vertical-align: middle;margin-right: 4px;" width="20" :src="item.fields['微信头像']['text']" />
-          <span style="color: white;vertical-align: middle;font-size: 12px;">{{ item.fields['微信昵称'] }}</span>
+          <van-image round style="vertical-align: middle;margin-right: 4px;" width="20" :src="item.fields['fldDW1myivghv']['text']" />
+          <span style="color: white;vertical-align: middle;font-size: 12px;">{{ item.fields['fldBcjNrgEoh1'] }}</span>
         </div>
       </div>
     </div>
