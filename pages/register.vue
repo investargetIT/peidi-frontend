@@ -15,6 +15,27 @@ const password = ref('');
 const groupChecked = ref([]);
 const city = ref('');
 
+const show = ref(false);
+const cascaderValue = ref('');
+// 选项列表，children 代表子选项，支持多级嵌套
+const options = [
+  {
+    text: '浙江省',
+    value: '330000',
+    children: [{ text: '杭州市', value: '330100' }],
+  },
+  {
+    text: '江苏省',
+    value: '320000',
+    children: [{ text: '南京市', value: '320100' }],
+  },
+];
+// 全部选项选择完毕后，会触发 finish 事件
+const onFinish = ({ selectedOptions }) => {
+  show.value = false;
+  city.value = selectedOptions.map((option) => option.text).join('/');
+};
+
 const disableFetchSmsCode = ref(false);
 const countdown = ref(60);
 
@@ -148,8 +169,13 @@ async function onSubmit(values) {
             </van-checkbox-group>
           </template>
         </van-field>
-        <van-field v-model="city" name="city" label="所在城市" placeholder="请输入所在城市"
-          :rules="[{ required: true, message: '请输入所在城市' }]" />
+
+        <van-field v-model="city" is-link readonly label="所在城市" placeholder="请选择所在城市" :rules="[{ required: true, message: '请选择所在城市' }]" @click="show = true" />
+        <van-popup v-model:show="show" round position="bottom">
+          <van-cascader v-model="cascaderValue" title="请选择所在城市" :options="options" @close="show = false"
+            @finish="onFinish" />
+        </van-popup>
+
         <van-field v-model="tel" name="tel" type="tel" label="手机号" placeholder="请输入手机号"
           :rules="[{ required: true, message: '请输入手机号' }]" />
         <van-field v-model="digit" name="sms_code" type="digit" label="验证码" placeholder="请输入验证码"
