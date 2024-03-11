@@ -1,6 +1,8 @@
 <script setup>
   if (localStorage.getItem('data')) {
-    navigateTo('/success');
+    await navigateTo('/success');
+  } else if (localStorage.getItem('user')) {
+    await navigateTo('/landing');
   }
   const runtimeConfig = useRuntimeConfig();
   useSeoMeta({
