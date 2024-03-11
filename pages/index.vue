@@ -6,7 +6,7 @@
   }
   const runtimeConfig = useRuntimeConfig();
   useSeoMeta({
-    title: '😙授权😈',
+    title: '😙授权（待修改）😈',
   });
   const route = useRoute();
   if (route.query.code) {

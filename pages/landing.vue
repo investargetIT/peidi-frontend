@@ -1,6 +1,6 @@
 <script setup>
   useSeoMeta({
-    title: '😙欢迎😈',
+    title: '😙欢迎（待修改）😈',
   });
   let user = localStorage.getItem('user');
   user = JSON.parse(user);
@@ -42,7 +42,7 @@
       </NuxtLink>
     </van-row>
     <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">你是第{{ total + 1 }}位小狗守护者</span></div>
-    <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">击掌1800次，佩蒂星球将开启XXX公益项目</span></div>
+    <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">（待修改）击掌1800次，佩蒂星球将开启XXX公益项目</span></div>
   </div>
 </template>
 
