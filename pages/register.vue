@@ -2,9 +2,9 @@
 import { ref } from 'vue';
 import { areaList } from '@vant/area-data';
 
-useSeoMeta({
-  title: '😙发声（待修改）😈',
-});
+// useSeoMeta({
+//   title: '😙发声（待修改）😈',
+// });
 
 const runtimeConfig = useRuntimeConfig();
 
