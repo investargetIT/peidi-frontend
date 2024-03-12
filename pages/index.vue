@@ -1,5 +1,5 @@
 <script setup>
-  if (localStorage.getItem('data')) {
+  if (localStorage.getItem('11c0fbe6-540f-483c-9826-6c4713464bf9')) {
     await navigateTo('/success');
   } else if (localStorage.getItem('user')) {
     await navigateTo('/landing');
