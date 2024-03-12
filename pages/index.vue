@@ -1,13 +1,26 @@
 <script setup>
-  if (localStorage.getItem('11c0fbe6-540f-483c-9826-6c4713464bf9')) {
-    await navigateTo('/success');
-  } else if (localStorage.getItem('user')) {
-    await navigateTo('/landing');
-  }
   const runtimeConfig = useRuntimeConfig();
-  // useSeoMeta({
-  //   title: '😙授权（待修改）😈',
-  // });
+  const checkWeChatUnionID = (unionid) => {
+    const filterByFormula = `{fldZzdmUhkpWQ}="${unionid}"`;
+    $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records?filterByFormula=${encodeURIComponent(filterByFormula)}`, {
+      headers: {
+        'Authorization': `Bearer ${runtimeConfig.public.APITABLE_API_TOKEN}`,
+      },
+    }).then((res) => {
+      if (res.success) {
+        if (res.data.total > 0) {
+          navigateTo('/success');
+        } else {
+          navigateTo('/landing');
+        }
+      }
+    });
+  };
+  let user = localStorage.getItem('user');
+  if (user) {
+    user = JSON.parse(user);
+    await checkWeChatUnionID(user.unionid);
+  }
   const route = useRoute();
   if (route.query.code) {
     showLoadingToast({
@@ -25,7 +38,7 @@
       console.log(res);
       if (res.code === 1000) {
         localStorage.setItem('user', JSON.stringify(res.result));
-        navigateTo('/landing');
+        checkWeChatUnionID(res.result.unionid);
       }
     });
   }
