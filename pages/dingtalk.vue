@@ -1,4 +1,7 @@
 <script setup>
+  import { initDingH5RemoteDebug } from "dingtalk-h5-remote-debug";
+  initDingH5RemoteDebug();
+  
   const runtimeConfig = useRuntimeConfig();
   const route = useRoute();
   if (route.query.code) {
