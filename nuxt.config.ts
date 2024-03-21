@@ -10,6 +10,7 @@ export default defineNuxtConfig({
       REDIRECT_URI: process.env.REDIRECT_URI,
       APITABLE_URL: process.env.APITABLE_URL,
       APITABLE_API_TOKEN: process.env.APITABLE_API_TOKEN,
+      DINGTALK_APP_ID: process.env.DINGTALK_APP_ID,
     },
   },
 })
