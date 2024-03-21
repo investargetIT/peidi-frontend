@@ -129,7 +129,6 @@ async function onSubmit(values) {
   });
   console.log(req1);
   if (req1.success) {
-    localStorage.setItem('11c0fbe6-540f-483c-9826-6c4713464bf9', JSON.stringify(req1.data));
     closeToast();
     navigateTo('/success');
   }
