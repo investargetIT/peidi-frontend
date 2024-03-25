@@ -19,6 +19,21 @@
           console.log('ddUserInfo', ddUserInfo);
           const { org_email: email } = ddUserInfo;
           console.log('email', email);
+          return $fetch(runtimeConfig.public.APITABLE_URL + '/api/v1/signIn', {
+            method: 'POST',
+            body: {
+              username: email,
+              credential: 'r8eCi(vZ',
+              type: 'password',
+            },
+          });
+        }
+      }).then((res) => {
+        if (res) {
+          console.log(res);
+          if (res.success) {
+            return navigateTo('/', { external: true });
+          }
         }
       });
     },
