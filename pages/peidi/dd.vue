@@ -9,7 +9,7 @@
     onSuccess: function (info) {
       console.log('info', info);
       const { code } = info; // 通过该免登授权码可以获取用户身份
-      $fetch('https://api.investarget.com/service/weixin/pduserinfo', {
+      $fetch(runtimeConfig.public.API_BASE_URL + '/service/dinguserinfo', {
         method: 'POST',
         body: { code },
       }).then((res) => {
