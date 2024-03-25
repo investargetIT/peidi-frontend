@@ -47,7 +47,7 @@ async function send_sms_code_btn_clicked(event) {
     message: '加载中...',
     forbidClick: true,
   });
-  const req = await $fetch(runtimeConfig.public.API_BASE_URL + '/service/sms', {
+  const req = await $fetch(runtimeConfig.public.INVESTARGET_API_BASE_URL + '/service/sms', {
     method: 'POST',
     headers: {
       source: 99,
@@ -86,7 +86,7 @@ async function onSubmit(values) {
     message: '加载中...',
     forbidClick: true,
   });
-  const req = await $fetch(runtimeConfig.public.API_BASE_URL + '/user/checkSms', {
+  const req = await $fetch(runtimeConfig.public.INVESTARGET_API_BASE_URL + '/user/checkSms', {
     method: 'POST',
     headers: {
       source: 99,

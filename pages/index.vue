@@ -30,7 +30,7 @@
     });
     const formData = new FormData();
     formData.append('code', route.query.code);
-    $fetch(runtimeConfig.public.API_BASE_URL + '/service/weixin/pduserinfo', {
+    $fetch(runtimeConfig.public.INVESTARGET_API_BASE_URL + '/service/weixin/pduserinfo', {
       method: 'POST',
       body: formData,
     }).then((res) => {

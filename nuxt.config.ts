@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       APITABLE_API_TOKEN: process.env.APITABLE_API_TOKEN,
       DINGTALK_CORP_ID: process.env.DINGTALK_CORP_ID,
       API_BASE_URL: process.env.API_BASE_URL,
+      INVESTARGET_API_BASE_URL: process.env.INVESTARGET_API_BASE_URL,
     },
   },
 })
