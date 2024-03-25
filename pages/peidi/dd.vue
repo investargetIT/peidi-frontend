@@ -18,11 +18,11 @@
           localStorage.setItem('ddUserInfo', JSON.stringify(res.result));
         }
       }).catch((err) => {
-        console.log(err);
+        console.error(err);
       });
     },
     onFail: function(err) {
-      console.log(err);
+      console.error(err);
     },
   });
 </script>
