@@ -14,11 +14,12 @@
         body: { code },
       }).then((res) => {
         console.log(res);
-        if (res.code === 1000) {
-          localStorage.setItem('ddUserInfo', JSON.stringify(res.result));
+        if (res.code === 1000 && res.result.errcode === 0) {
+          const { result: ddUserInfo } = res.result;
+          console.log('ddUserInfo', ddUserInfo);
+          const { org_email: email } = ddUserInfo;
+          console.log('email', email);
         }
-      }).catch((err) => {
-        console.error(err);
       });
     },
     onFail: function(err) {
