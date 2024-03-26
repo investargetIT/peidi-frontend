@@ -29,11 +29,9 @@
       message: '加载中...',
       forbidClick: true,
     });
-    const formData = new FormData();
-    formData.append('code', route.query.code);
-    $fetch(runtimeConfig.public.INVESTARGET_API_BASE_URL + '/service/weixin/pduserinfo', {
+    $fetch(runtimeConfig.public.API_BASE_URL + '/service/wxuserinfo', {
       method: 'POST',
-      body: formData,
+      body: { code: route.query.code },
     }).then((res) => {
       closeToast();
       console.log(res);
