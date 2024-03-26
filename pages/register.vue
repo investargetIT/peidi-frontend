@@ -47,11 +47,8 @@ async function send_sms_code_btn_clicked(event) {
     message: '加载中...',
     forbidClick: true,
   });
-  const req = await $fetch(runtimeConfig.public.INVESTARGET_API_BASE_URL + '/service/sms', {
+  const req = await $fetch(runtimeConfig.public.API_BASE_URL + '/service/sendsms', {
     method: 'POST',
-    headers: {
-      source: 99,
-    },
     body: {
       mobile: tel.value,
     },
@@ -62,11 +59,11 @@ async function send_sms_code_btn_clicked(event) {
   if (code != 1000) {
     return;
   }
-  const { status, smstoken } = result;
-  if (status != 'success') {
+  const { res, sms_token } = result;
+  if (res != 'OK') {
     return;
   }
-  localStorage.setItem('smstoken', smstoken);
+  localStorage.setItem('smstoken', sms_token);
   disableFetchSmsCode.value = true;
   fetchSMSCodeCountdown();
   showToast('验证码发送成功，请注意查收');
@@ -86,19 +83,16 @@ async function onSubmit(values) {
     message: '加载中...',
     forbidClick: true,
   });
-  const req = await $fetch(runtimeConfig.public.INVESTARGET_API_BASE_URL + '/user/checkSms', {
+  const req = await $fetch(runtimeConfig.public.API_BASE_URL + '/service/checksms', {
     method: 'POST',
-    headers: {
-      source: 99,
-    },
     body: {
       mobile: tel.value,
-      mobilecode: digit.value,
-      mobilecodetoken: smstoken,
+      sms_code: digit.value,
+      sms_token: smstoken,
     },
   });
   console.log(req);
-  const { code, result } = req;
+  const { code } = req;
   if (code != 1000) {
     closeToast();
     showToast('验证失败，请输入正确的验证码');
