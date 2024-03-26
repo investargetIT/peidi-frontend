@@ -4,6 +4,14 @@
 
   initDingH5RemoteDebug();
   const runtimeConfig = useRuntimeConfig();
+
+  let redirect_uri = runtimeConfig.public.APITABLE_URL;
+  const route = useRoute();
+  if (route.query.redirect_uri) {
+    redirect_uri += decodeURIComponent(route.query.redirect_uri);
+    console.log('redirect_uri', redirect_uri);
+  }
+
   dd.runtime.permission.requestAuthCode({
     corpId: runtimeConfig.public.DINGTALK_CORP_ID, // 企业id
     onSuccess: function (info) {
@@ -35,7 +43,7 @@
         if (res) {
           console.log('signIn', res);
           if (res.success) {
-            return navigateTo(runtimeConfig.public.APITABLE_URL, { external: true });
+            return navigateTo(redirect_uri, { external: true });
           } else {
             return $fetch(runtimeConfig.public.APITABLE_URL + '/api/v1/register', {
               method: 'POST',
@@ -49,7 +57,7 @@
       }).then(res => {
         console.log('register', res);
         if (res && res.success) {
-          return navigateTo(runtimeConfig.public.APITABLE_URL, { external: true });
+          return navigateTo(redirect_uri, { external: true });
         }
       });
     },
