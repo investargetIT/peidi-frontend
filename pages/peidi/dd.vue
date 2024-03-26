@@ -7,6 +7,7 @@
   dd.runtime.permission.requestAuthCode({
     corpId: runtimeConfig.public.DINGTALK_CORP_ID, // 企业id
     onSuccess: function (info) {
+      let ddEmail = null;
       console.log(info);
       const { code } = info; // 通过该免登授权码可以获取用户身份
       $fetch(runtimeConfig.public.API_BASE_URL + '/service/dinguserinfo', {
@@ -17,13 +18,15 @@
         if (res.code === 1000 && res.result.errcode === 0) {
           const { result: ddUserInfo } = res.result;
           console.log('ddUserInfo', ddUserInfo);
-          const { org_email: email } = ddUserInfo;
-          console.log('email', email);
+          const { org_email } = ddUserInfo;
+          // TODO: if no org_email
+          ddEmail = org_email;
+          console.log('ddEmail', ddEmail);
           return $fetch(runtimeConfig.public.APITABLE_URL + '/api/v1/signIn', {
             method: 'POST',
             body: {
-              username: email,
-              credential: 'r8eCi(vZ',
+              username: ddEmail,
+              credential: runtimeConfig.public.APITABLE_DEFAULT_PASSWORD,
               type: 'password',
             },
           });
@@ -37,8 +40,8 @@
             return $fetch(runtimeConfig.public.APITABLE_URL + '/api/v1/register', {
               method: 'POST',
               body: {
-                username: email,
-                credential: 'r8eCi(vZ',
+                username: ddEmail,
+                credential: runtimeConfig.public.APITABLE_DEFAULT_PASSWORD,
               },
             });
           }
