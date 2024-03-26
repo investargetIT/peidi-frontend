@@ -4,6 +4,7 @@
 
   initDingH5RemoteDebug();
   const runtimeConfig = useRuntimeConfig();
+  const ddEmail = ref('');
 
   let redirect_uri = runtimeConfig.public.APITABLE_URL;
   const route = useRoute();
@@ -15,7 +16,6 @@
   dd.runtime.permission.requestAuthCode({
     corpId: runtimeConfig.public.DINGTALK_CORP_ID, // 企业id
     onSuccess: function (info) {
-      let ddEmail = null;
       console.log(info);
       const { code } = info; // 通过该免登授权码可以获取用户身份
       $fetch(runtimeConfig.public.API_BASE_URL + '/service/dinguserinfo', {
@@ -27,17 +27,18 @@
           const { result: ddUserInfo } = res.result;
           console.log('ddUserInfo', ddUserInfo);
           const { org_email } = ddUserInfo;
-          // TODO: if no org_email
-          ddEmail = org_email;
-          console.log('ddEmail', ddEmail);
-          return $fetch(runtimeConfig.public.APITABLE_URL + '/api/v1/signIn', {
-            method: 'POST',
-            body: {
-              username: ddEmail,
-              credential: runtimeConfig.public.APITABLE_DEFAULT_PASSWORD,
-              type: 'password',
-            },
-          });
+          ddEmail.value = org_email;
+          if (ddEmail.value) {
+            console.log('ddEmail', ddEmail.value);
+            return $fetch(runtimeConfig.public.APITABLE_URL + '/api/v1/signIn', {
+              method: 'POST',
+              body: {
+                username: ddEmail.value,
+                credential: runtimeConfig.public.APITABLE_DEFAULT_PASSWORD,
+                type: 'password',
+              },
+            });
+          }
         }
       }).then(res => {
         if (res) {
@@ -48,7 +49,7 @@
             return $fetch(runtimeConfig.public.APITABLE_URL + '/api/v1/register', {
               method: 'POST',
               body: {
-                username: ddEmail,
+                username: ddEmail.value,
                 credential: runtimeConfig.public.APITABLE_DEFAULT_PASSWORD,
               },
             });
@@ -66,3 +67,7 @@
     },
   });
 </script>
+
+<template>
+  <h1 v-if="ddEmail === undefined">邮箱不存在，请联系系统管理员</h1>
+</template>
