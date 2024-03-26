@@ -23,6 +23,7 @@
   }
   const route = useRoute();
   if (route.query.code) {
+    console.log('code', route.query.code);
     showLoadingToast({
       duration: 0,
       message: '加载中...',
