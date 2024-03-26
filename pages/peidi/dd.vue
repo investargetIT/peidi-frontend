@@ -28,12 +28,25 @@
             },
           });
         }
-      }).then((res) => {
+      }).then(res => {
         if (res) {
-          console.log(res);
+          console.log('signIn', res);
           if (res.success) {
-            return navigateTo('/', { external: true });
+            return navigateTo(runtimeConfig.public.APITABLE_URL, { external: true });
+          } else {
+            return $fetch(runtimeConfig.public.APITABLE_URL + '/api/v1/register', {
+              method: 'POST',
+              body: {
+                username: email,
+                credential: 'r8eCi(vZ',
+              },
+            });
           }
+        }
+      }).then(res => {
+        console.log('register', res);
+        if (res && res.success) {
+          return navigateTo(runtimeConfig.public.APITABLE_URL, { external: true });
         }
       });
     },
