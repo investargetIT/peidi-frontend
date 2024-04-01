@@ -1,75 +1,16 @@
-# Nuxt 3 Minimal Starter
+# 钉钉免登 APITable
+路由`/peidi/dd`实现了钉钉免登，访问该页面会获取当前钉钉用户企业邮箱，然后自动登录或注册 APITable。登录或注册成功后会自动跳转到实际需要使用的 APITable 页面
+## 使用
+1. 确定 APITable 的域名
+1. 确定需要跳转的路由，譬如 `/share/shrQc3ZDaTXz8ElLz12uD`
+2. 将该路由 Encode 一下，得到 `%2Fshare%2FshrQc3ZDaTXz8ElLz12uD`（这里就是把斜杠替换成了%2F）
+3. 域名 + `/peidi/dd?redirect_uri=%2Fshare%2FshrQy3ZDaTXz8ElLz12uD` 就是钉钉应用的首页地址
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
-## Setup
-
-Make sure to install the dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+## 实现
+通过 NGINX 将 `/peidi/dd` 这个路由代理到 APITable 的域名下
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+location ~ /(peidi|_nuxt)/ {
+    root /media/www/planet;
+    try_files $uri $uri/ =404;
+}
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
