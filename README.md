@@ -1,3 +1,17 @@
+# 基本操作
+1.构建镜像
+```
+./build.sh
+```
+2.运行容器
+```
+./run.sh
+```
+3.生成静态页面
+```
+docker exec peidi-frontend npm run generate
+```
+
 # 钉钉免登 APITable
 路由`/peidi/dd`实现了钉钉免登，访问该页面会获取当前钉钉用户企业邮箱，然后自动登录或注册 APITable。登录或注册成功后会自动跳转到实际需要使用的 APITable 页面
 ## 使用
