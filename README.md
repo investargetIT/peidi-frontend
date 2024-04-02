@@ -7,7 +7,7 @@
 ```
 ./run.sh
 ```
-3.生成静态页面
+3.生成静态页面，路径是`./.output/public/`
 ```
 docker exec peidi-frontend npm run generate
 ```
