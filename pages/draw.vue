@@ -4,12 +4,38 @@ export default {
     return {
       blocks: [{ padding: '13px', background: '#617df2' }],
       prizes: [
-        { fonts: [{ text: '0', top: '10%' }], background: '#e9e8fe' },
-        { fonts: [{ text: '1', top: '10%' }], background: '#b8c5f2' },
-        { fonts: [{ text: '2', top: '10%' }], background: '#e9e8fe' },
-        { fonts: [{ text: '3', top: '10%' }], background: '#b8c5f2' },
-        { fonts: [{ text: '4', top: '10%' }], background: '#e9e8fe' },
-        { fonts: [{ text: '5', top: '10%' }], background: '#b8c5f2' },
+        { fonts: [
+          { text: '爵宴鸭肉干', top: '10%', fontSize: 16 },
+          { text: '100g1包', top: '36%', fontSize: 14 },
+        ], background: '#e9e8fe' },
+        { fonts: [
+          { text: '爵宴风干粮', top: '10%', fontSize: 16 },
+          { text: '50g1包', top: '36%', fontSize: 14 },
+        ], background: '#b8c5f2' },
+        { fonts: [
+          { text: '爵宴风干粮', top: '10%', fontSize: 16 },
+          { text: '50g1包', top: '36%', fontSize: 14 },
+        ], background: '#e9e8fe' },
+        { fonts: [
+          { text: '爵宴鸭肉干', top: '10%', fontSize: 16 },
+          { text: '100g1包', top: '36%', fontSize: 14 },
+        ], background: '#b8c5f2' },
+        { fonts: [
+          { text: '爵宴罐头', top: '10%', fontSize: 16 },
+          { text: '130g1个', top: '36%', fontSize: 14 },
+        ], background: '#e9e8fe' },
+        { fonts: [
+          { text: '爵宴风干粮', top: '10%', fontSize: 16 },
+          { text: '50g1包', top: '36%', fontSize: 14 },
+        ], background: '#b8c5f2' },
+        { fonts: [
+          { text: '爵宴风干粮', top: '10%', fontSize: 16 },
+          { text: '50g1包', top: '36%', fontSize: 14 },
+        ], background: '#e9e8fe' },
+        { fonts: [
+          { text: '爵宴罐头', top: '10%', fontSize: 16 },
+          { text: '130g1个', top: '36%', fontSize: 14 },
+        ], background: '#b8c5f2' },
       ],
       buttons: [{
         radius: '35%',
@@ -44,7 +70,7 @@ export default {
   <van-image style="position: relative;" width="100vw" src="/bg_blur.jpg" />
   <div style="position: absolute;top: 50px; width: 100%;">
     <div style="width: 80%;margin:auto;text-align: center;color: white;"><span style="background-color: orange;">感谢您参与发声公益活动！<br>佩蒂邀请您参与抽奖活动！</span></div>
-    <van-row justify="center">
+    <van-row justify="center" style="margin: 20px 0;">
       <LuckyWheel
         ref="myLucky"
         width="300px"
