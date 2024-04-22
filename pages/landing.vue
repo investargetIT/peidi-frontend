@@ -38,7 +38,7 @@
     <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">和小狗握爪，为它发声！</span></div>
     <van-row justify="center">
       <NuxtLink to="/register">
-        <van-image width="100" src="/paw.png" />
+        <van-image width="340" src="/paw.png" />
       </NuxtLink>
     </van-row>
     <div style="width: 80%;margin:20px auto;text-align: center;color: white;"><span style="background-color: orange;">你是第{{ total + 1 }}位小狗守护者</span></div>
