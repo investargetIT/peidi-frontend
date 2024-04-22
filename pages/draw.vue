@@ -53,14 +53,46 @@ export default {
       // 模拟调用接口异步抽奖
       setTimeout(() => {
         // 假设后端返回的中奖索引是0
-        const index = 0
+        const index = this.getIndexFromRandomNum();
         // 调用stop停止旋转并传递中奖索引
         this.$refs.myLucky.stop(index)
       }, 3000)
     },
     // 抽奖结束会触发end回调
     endCallback (prize) {
-      console.log(prize)
+      console.log('prize', prize);
+    },
+    getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    getIndexFromRandomNum() {
+      const num = this.getRandomInt(1, 100);
+      if (num == 1) {
+        return 0;
+      }
+      if (num >= 2 && num <= 25) {
+        return 1;
+      }
+      if (num >= 26 && num <= 49) {
+        return 2;
+      }
+      if (num == 50) {
+        return 3;
+      }
+      if (num == 51) {
+        return 4;
+      }
+      if (num >= 52 && num <= 75) {
+        return 5;
+      }
+      if (num >= 76 && num <= 99) {
+        return 6;
+      }
+      if (num == 100) {
+        return 7;
+      }
     },
   }
 }
