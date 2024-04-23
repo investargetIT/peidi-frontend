@@ -2,14 +2,21 @@
   const runtimeConfig = useRuntimeConfig();
   const checkWeChatUnionID = (unionid) => {
     const filterByFormula = `{fldZzdmUhkpWQ}="${unionid}"`;
-    $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records?filterByFormula=${encodeURIComponent(filterByFormula)}`, {
+    $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records?filterByFormula=${encodeURIComponent(filterByFormula)}&fieldKey=id`, {
       headers: {
         'Authorization': `Bearer ${runtimeConfig.public.APITABLE_API_TOKEN}`,
       },
     }).then((res) => {
       if (res.success) {
         if (res.data.total > 0) {
-          navigateTo('/success');
+          const allData = res.data.records;
+          const filterRecord = allData.filter(f => f.fields.fldE0DSztgMVz.includes('京宠联萌派对&北京'));
+          if (filterRecord.length > 0) {
+            localStorage.setItem('record', JSON.stringify(filterRecord[0]));
+            navigateTo('/draw');
+          } else {
+            navigateTo('/landing');
+          }
         } else {
           navigateTo('/landing');
         }
