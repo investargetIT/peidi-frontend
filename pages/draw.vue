@@ -120,7 +120,7 @@ export default {
       />
     </van-row>
     <div v-if="!!result" style="width: 80%;margin:20px auto;text-align: center;color: white;background-color: orange;">
-      <div>恭喜您获得{{ result }}，请前往D.A.O coffee•西西里村咖啡店领取奖品</div>
+      <div>恭喜您获得{{ result }}，请前往D.A.O coffee•西西里村咖啡店领取奖品，奖品仅限当天（{{ new Date().toLocaleDateString() }}）领取</div>
       <div style="font-size: 14px;">地址：农展南路甲9号东枫国际体育园内（距地铁10号中心结湖站C口（东南口）步行560m）</div>
     </div>
     <van-row justify="center">
