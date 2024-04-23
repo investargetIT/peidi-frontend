@@ -65,7 +65,29 @@ export default {
     },
     // 抽奖结束会触发end回调
     endCallback (prize) {
-      this.result = prize.fonts.map(m => m.text).join('');
+      const drawResult = prize.fonts.map(m => m.text).join('');
+      const runtimeConfig = useRuntimeConfig();
+      $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${runtimeConfig.public.APITABLE_API_TOKEN}`,
+        },
+        body: {
+          'records': [{
+            'recordId': '',
+            'fields': {
+              'fldE0DSztgMVz': ['京宠联萌派对&北京', drawResult], // 用户标签
+            }
+          }],
+          'fieldKey': 'id',
+        },
+      }).then(res => {
+        console.log(res);
+        if (res.success) {
+          this.result = drawResult;
+        }
+      });
     },
     getRandomInt(min, max) {
       min = Math.ceil(min);
@@ -120,7 +142,7 @@ export default {
       />
     </van-row>
     <div v-if="!!result" style="width: 80%;margin:20px auto;text-align: center;color: white;background-color: orange;">
-      <div>恭喜您获得{{ result }}，请前往D.A.O coffee•西西里村咖啡店领取奖品，奖品仅限当天（{{ new Date().toLocaleDateString() }}）领取</div>
+      <div>恭喜您获得<b>{{ result }}</b>，请前往D.A.O coffee•西西里村咖啡店领取奖品，奖品仅限当天（{{ new Date().toLocaleDateString() }}）领取</div>
       <div style="font-size: 14px;">地址：农展南路甲9号东枫国际体育园内（距地铁10号中心结湖站C口（东南口）步行560m）</div>
     </div>
     <van-row justify="center">
