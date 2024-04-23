@@ -134,6 +134,7 @@ async function onSubmit(values) {
   });
   console.log(req1);
   if (req1.success) {
+    localStorage.setItem('record', JSON.stringify(req1.data.records[0]));
     closeToast();
     navigateTo('/success');
   }

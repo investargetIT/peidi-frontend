@@ -66,6 +66,9 @@ export default {
     // 抽奖结束会触发end回调
     endCallback (prize) {
       const drawResult = prize.fonts.map(m => m.text).join('');
+      let record = localStorage.getItem('record');
+      if (!record) return;
+      record = JSON.parse(record);
       const runtimeConfig = useRuntimeConfig();
       $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
         method: 'PATCH',
@@ -75,7 +78,7 @@ export default {
         },
         body: {
           'records': [{
-            'recordId': '',
+            'recordId': record.id,
             'fields': {
               'fldE0DSztgMVz': ['京宠联萌派对&北京', drawResult], // 用户标签
             }
