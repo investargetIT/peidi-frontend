@@ -22,6 +22,15 @@ const onFinish = ({ selectedOptions }) => {
   city.value = selectedOptions.map((option) => option.text).join('/');
 };
 
+const minDate = new Date(2000, 0, 1);
+const maxDate = new Date();
+const birthday = ref('');
+const showDatePickerModal = ref(false);
+const onFinishPickDate = ({ selectedOptions }) => {
+  showDatePickerModal.value = false;
+  birthday.value = selectedOptions.map((option) => option.text).join('-');
+};
+
 const disableFetchSmsCode = ref(false);
 const countdown = ref(60);
 
@@ -109,7 +118,8 @@ async function onSubmit(values) {
       'records': [{
         'fields': {
           'fldBNEfobFEGs': text.value, // 宠物姓名
-          'fldlK5h1BJDB3': groupChecked.value, // 宠物类别
+          // 'fldlK5h1BJDB3': groupChecked.value, // 宠物类别
+          'fldlK5h1BJDB3': '狗', // 宠物类别
           'fld3Bqp5Pfkb6': tel.value, // 手机号码
           'fldE0DSztgMVz': ['京宠展2024(3.29-4.1)'], // 用户标签
           'fldeuBBZ4OyS1': city.value, // 所在城市
@@ -141,16 +151,24 @@ async function onSubmit(values) {
       <van-cell-group inset>
         <van-field v-model="text" name="name" label="宠物姓名" placeholder="请输入爱宠姓名"
           :rules="[{ required: true, message: '请输入爱宠姓名' }]" />
-        <van-field name="checkboxGroup" label="宠物类别" :rules="[{ required: true, message: '请选择宠物类别' }]">
+
+        <!-- <van-field name="checkboxGroup" label="宠物类别" :rules="[{ required: true, message: '请选择宠物类别' }]">
           <template #input>
             <van-checkbox-group v-model="groupChecked" direction="horizontal">
               <van-checkbox name="猫" shape="square">猫</van-checkbox>
               <van-checkbox name="狗" shape="square">狗</van-checkbox>
             </van-checkbox-group>
           </template>
-        </van-field>
+        </van-field> -->
 
-        <van-field v-model="city" is-link readonly label="所在城市" placeholder="请选择所在城市" :rules="[{ required: true, message: '请选择所在城市' }]" @click="show = true" />
+        <van-field v-model="birthday" is-link readonly label="宠物生日" placeholder="请选择宠物生日"
+          :rules="[{ required: true, message: '请选择宠物生日' }]" @click="showDatePickerModal = true" />
+        <van-popup v-model:show="showDatePickerModal" round position="bottom">
+          <van-date-picker title="宠物生日" :min-date="minDate" :max-date="maxDate" @cancel="showDatePickerModal = false" @confirm="onFinishPickDate" />
+        </van-popup>
+
+        <van-field v-model="city" is-link readonly label="所在城市" placeholder="请选择所在城市"
+          :rules="[{ required: true, message: '请选择所在城市' }]" @click="show = true" />
         <van-popup v-model:show="show" round position="bottom">
           <van-area title="所在城市" :area-list="areaList" :columns-num="2" @cancel="show = false" @confirm="onFinish" />
         </van-popup>
