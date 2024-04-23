@@ -28,7 +28,7 @@ const birthday = ref('');
 const showDatePickerModal = ref(false);
 const onFinishPickDate = ({ selectedOptions }) => {
   showDatePickerModal.value = false;
-  birthday.value = selectedOptions.map((option) => option.text).join('-');
+  birthday.value = selectedOptions.map((option) => option.text).join('/');
 };
 
 const disableFetchSmsCode = ref(false);
@@ -119,9 +119,10 @@ async function onSubmit(values) {
         'fields': {
           'fldBNEfobFEGs': text.value, // 宠物姓名
           // 'fldlK5h1BJDB3': groupChecked.value, // 宠物类别
+          'fldD7ZOASWW8H': birthday.value, // 宠物生日
           'fldlK5h1BJDB3': '狗', // 宠物类别
           'fld3Bqp5Pfkb6': tel.value, // 手机号码
-          'fldE0DSztgMVz': ['京宠展2024(3.29-4.1)'], // 用户标签
+          'fldE0DSztgMVz': ['京宠联萌派对&北京'], // 用户标签
           'fldeuBBZ4OyS1': city.value, // 所在城市
           'fldBcjNrgEoh1': user && user.nickname, // 微信昵称
           'fldDW1myivghv': user && user.headimgurl, // 微信头像
