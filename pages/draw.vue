@@ -44,7 +44,16 @@ export default {
         fonts: [{ text: '开始', top: '-10px' }],
       }],
       result: null,
+      date: null,
     };
+  },
+  mounted: function() {
+    let draw = localStorage.getItem('draw');
+    console.log('draw', draw);
+    if (!draw) return;
+    draw = JSON.parse(draw);
+    this.result = draw.result;
+    this.date = draw.date;
   },
   methods: {
     // 点击抽奖按钮会触发star回调
@@ -66,6 +75,16 @@ export default {
     // 抽奖结束会触发end回调
     endCallback (prize) {
       const drawResult = prize.fonts.map(m => m.text).join('');
+      const date = new Date().toLocaleDateString();
+      const draw = {
+        result: drawResult,
+        date,
+      }
+      localStorage.setItem('draw', JSON.stringify(draw));
+      this.result = drawResult;
+      this.date = date;
+
+      // 更新记录，增加奖品作为用户标签
       let record = localStorage.getItem('record');
       if (!record) return;
       record = JSON.parse(record);
@@ -85,11 +104,6 @@ export default {
           }],
           'fieldKey': 'id',
         },
-      }).then(res => {
-        console.log(res);
-        if (res.success) {
-          this.result = drawResult;
-        }
       });
     },
     getRandomInt(min, max) {
@@ -145,7 +159,7 @@ export default {
       />
     </van-row>
     <div v-if="!!result" style="width: 80%;margin:20px auto;text-align: center;color: white;background-color: orange;">
-      <div>恭喜您获得<b>{{ result }}</b>，请前往D.A.O coffee•西西里村咖啡店领取奖品，奖品仅限当天（{{ new Date().toLocaleDateString() }}）领取</div>
+      <div>恭喜您获得<b>{{ result }}</b>，请前往D.A.O coffee•西西里村咖啡店领取奖品，奖品仅限当天（{{ date }}）领取</div>
       <div style="font-size: 14px;">地址：农展南路甲9号东枫国际体育园内（距地铁10号中心结湖站C口（东南口）步行560m）</div>
     </div>
     <van-row justify="center">
