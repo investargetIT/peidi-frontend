@@ -49,7 +49,10 @@ export default {
   methods: {
     // 点击抽奖按钮会触发star回调
     startCallback () {
-      if (!!this.result) return;
+      if (!!this.result) {
+        showToast('感谢您参与本次抽奖活动');
+        return;
+      }
       // 调用抽奖组件的play方法开始游戏
       this.$refs.myLucky.play();
       // 模拟调用接口异步抽奖
