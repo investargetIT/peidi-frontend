@@ -41,7 +41,7 @@ export default {
         radius: '35%',
         background: '#8a9bf3',
         pointer: true,
-        fonts: [{ text: '开始', top: '-10px' }]
+        fonts: [{ text: '开始', top: '-10px' }],
       }],
       result: null,
     };
@@ -49,6 +49,7 @@ export default {
   methods: {
     // 点击抽奖按钮会触发star回调
     startCallback () {
+      if (!!this.result) return;
       // 调用抽奖组件的play方法开始游戏
       this.$refs.myLucky.play();
       // 模拟调用接口异步抽奖
