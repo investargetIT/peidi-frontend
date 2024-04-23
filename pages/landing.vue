@@ -19,7 +19,7 @@
 </script>
 
 <template>
-  <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
+  <van-image style="position: relative;" width="100vw" src="/bg2.jpg" />
   <div style="position: absolute;top: 0; width: 100%;height: 280px;overflow: hidden;">
     <div style="position: absolute;right: 0;" :class="`${list.length > 0 && 'list'}`">
       <div v-for="item in list" style="text-align: right;">
@@ -38,7 +38,7 @@
     <div style="width: 80%;margin:0 auto;text-align: center;color: white;"><span style="background-color: orange;">点击下方按钮，为它发声！</span></div>
     <van-row justify="center">
       <NuxtLink to="/register">
-        <van-image width="340" src="/paw.png" />
+        <van-image width="340" src="/paw2.png" />
       </NuxtLink>
     </van-row>
     <div style="width: 80%;margin:0 auto;text-align: center;color: white;"><span style="background-color: orange;">你是第{{ total + 1 }}位小狗守护者</span></div>

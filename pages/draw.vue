@@ -143,7 +143,7 @@ export default {
 </script>
 
 <template>
-  <van-image style="position: relative;" width="100vw" src="/bg_blur.jpg" />
+  <van-image style="position: relative;" width="100vw" src="/bg_blur2.jpg" />
   <div style="position: absolute;top: 50px; width: 100%;">
     <div style="width: 80%;margin:auto;text-align: center;color: white;"><span style="background-color: orange;">感谢您参与发声公益活动！<br>佩蒂邀请您参与抽奖活动！</span></div>
     <van-row justify="center" style="margin: 20px 0;">

@@ -54,7 +54,7 @@
 </script>
 
 <template>
-  <van-image style="position: relative;" width="100vw" src="/bg.jpg" />
+  <van-image style="position: relative;" width="100vw" src="/bg2.jpg" />
   <div style="position: absolute;top: 360px; width: 100%;">
     <div style="width: 90%;margin:20px auto;background-color: rgba(255, 255, 255, .8);padding: 6px;border-radius: 4px;">
       <div>佩蒂智创宠物科技有限公司申请获得您的公开信息（昵称、头像等）用于以下作用：</div>

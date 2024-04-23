@@ -143,7 +143,7 @@ async function onSubmit(values) {
 </script>
 
 <template>
-  <van-image style="position: relative;" width="100vw" src="/bg_blur.jpg" />
+  <van-image style="position: relative;" width="100vw" src="/bg_blur2.jpg" />
   <div style="position: absolute;top: 50px; width: 100%;">
     <van-row justify="center">
       <van-image width="50" height="50" :src="user && user.headimgurl" />

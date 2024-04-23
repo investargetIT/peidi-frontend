@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <van-image style="position: relative;" width="100vw" src="/bg_blur.jpg" />
+  <van-image style="position: relative;" width="100vw" src="/bg_blur2.jpg" />
   <div style="position: absolute;top: 50px; width: 100%;">
     <div style="width: 80%;margin:auto;text-align: center;color: white;"><span style="background-color: orange;">感谢您参与发声公益活动！<br>送您一份天猫专属旗舰店优惠！</span></div>
     <div style="width: 90%;margin: 20px auto;text-align: center;color: white;word-break: break-all;background-color: orange;">https://pages.tmall.com/wow/a/act/tmall/dailygroup/16355/16802/wupr?wh_pid=daily-465056&disableNav=YES&status_bar_transparent=true&sellerId=2208219144847&activityId=a19160040adb4fb5895e67fdf8372209&toolName=shopCoupon</div>
