@@ -43,24 +43,25 @@ export default {
         pointer: true,
         fonts: [{ text: '开始', top: '-10px' }]
       }],
-    }
+      result: null,
+    };
   },
   methods: {
     // 点击抽奖按钮会触发star回调
     startCallback () {
       // 调用抽奖组件的play方法开始游戏
-      this.$refs.myLucky.play()
+      this.$refs.myLucky.play();
       // 模拟调用接口异步抽奖
       setTimeout(() => {
         // 假设后端返回的中奖索引是0
         const index = this.getIndexFromRandomNum();
         // 调用stop停止旋转并传递中奖索引
-        this.$refs.myLucky.stop(index)
-      }, 3000)
+        this.$refs.myLucky.stop(index);
+      }, 3000);
     },
     // 抽奖结束会触发end回调
     endCallback (prize) {
-      console.log('prize', prize);
+      this.result = prize.fonts.map(m => m.text).join('');
     },
     getRandomInt(min, max) {
       min = Math.ceil(min);
@@ -114,6 +115,10 @@ export default {
         @end="endCallback"
       />
     </van-row>
+    <div v-if="!!result" style="width: 80%;margin:20px auto;text-align: center;color: white;background-color: orange;">
+      <div>恭喜您获得{{ result }}，请前往D.A.O coffee•西西里村咖啡店领取奖品</div>
+      <div style="font-size: 14px;">地址：农展南路甲9号东枫国际体育园内（距地铁10号中心结湖站C口（东南口）步行560m）</div>
+    </div>
     <van-row justify="center">
       <van-image width="100" src="/qr.png" />
     </van-row>
