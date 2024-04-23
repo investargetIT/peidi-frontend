@@ -97,7 +97,7 @@ export default {
         },
         body: {
           'records': [{
-            'recordId': record.id,
+            'recordId': record.recordId,
             'fields': {
               'fldE0DSztgMVz': ['京宠联萌派对&北京', drawResult], // 用户标签
             }

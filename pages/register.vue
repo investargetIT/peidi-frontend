@@ -120,7 +120,7 @@ async function onSubmit(values) {
           'fldBNEfobFEGs': text.value, // 宠物姓名
           // 'fldlK5h1BJDB3': groupChecked.value, // 宠物类别
           'fldD7ZOASWW8H': birthday.value, // 宠物生日
-          'fldlK5h1BJDB3': '狗', // 宠物类别
+          'fldlK5h1BJDB3': ['狗'], // 宠物类别
           'fld3Bqp5Pfkb6': tel.value, // 手机号码
           'fldE0DSztgMVz': ['京宠联萌派对&北京'], // 用户标签
           'fldeuBBZ4OyS1': city.value, // 所在城市
@@ -136,7 +136,7 @@ async function onSubmit(values) {
   if (req1.success) {
     localStorage.setItem('record', JSON.stringify(req1.data.records[0]));
     closeToast();
-    navigateTo('/success');
+    navigateTo('/draw');
   }
   closeToast();
 }
