@@ -145,7 +145,7 @@ export default {
 <template>
   <van-image style="position: relative;" width="100vw" src="/bg_blur2.jpg" />
   <div style="position: absolute;top: 50px; width: 100%;">
-    <div style="width: 80%;margin:auto;text-align: center;color: white;"><span style="background-color: orange;">感谢您参与发声公益活动！<br>佩蒂邀请您参与抽奖活动！</span></div>
+    <div style="width: 80%;margin:auto;text-align: center;color: white;"><span style="background-color: #617df2;">感谢您参与发声公益活动！<br>佩蒂邀请您参与抽奖活动！</span></div>
     <van-row justify="center" style="margin: 20px 0;">
       <LuckyWheel
         ref="myLucky"
@@ -158,13 +158,10 @@ export default {
         @end="endCallback"
       />
     </van-row>
-    <div v-if="!!result" style="width: 80%;margin:20px auto;text-align: center;color: white;background-color: orange;">
-      <div>恭喜您获得<b>{{ result }}</b>，请前往D.A.O coffee•西西里村咖啡店领取奖品，奖品仅限当天（{{ date }}）领取</div>
-      <div style="font-size: 14px;">地址：农展南路甲9号东枫国际体育园内（距地铁10号中心结湖站C口（东南口）步行560m）</div>
+    <div v-if="!!result" style="width: 80%;margin:20px auto;padding: 6px;color: white;background-color: #617df2;font-size: 14px;">
+      <div>恭喜您抽中<span style="font-size: 16px;font-weight: bold;">{{ result }}</span>！请前往<b>D.A.O coffee•西西里村咖啡店</b>领取</div>
+      <div style="font-size: 14px;margin: 6px 0;">地址:东枫国际体育园内(距地铁10号中心结湖站C口(东南口)步行560m)</div>
+      <div style="font-size: 14px;">ps:奖品仅限当天({{ date }})领取，请及时前往</div>
     </div>
-    <van-row justify="center">
-      <van-image width="100" src="/qr.png" />
-    </van-row>
-    <div style="width: 80%;margin: 20px auto;text-align: center;color: white;"><span style="background-color: orange;">扫码添加小蒂，关注活动后续进展以及优惠券使用，还有更多品牌福利等你解锁！</span></div>
   </div>
 </template>
