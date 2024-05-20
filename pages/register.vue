@@ -108,7 +108,7 @@ async function onSubmit(values) {
     return;
   }
   
-  const req1 = await $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
+  const req1 = await $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstfD2Z1kElRo2vhnf/records', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -117,19 +117,18 @@ async function onSubmit(values) {
     body: {
       'records': [{
         'fields': {
-          'fldBNEfobFEGs': text.value, // 宠物姓名
-          // 'fldlK5h1BJDB3': groupChecked.value, // 宠物类别
-          'fldD7ZOASWW8H': birthday.value, // 宠物生日
-          'fldlK5h1BJDB3': ['狗'], // 宠物类别
-          'fld3Bqp5Pfkb6': tel.value, // 手机号码
-          'fldE0DSztgMVz': ['京宠联萌派对&北京'], // 用户标签
-          'fldeuBBZ4OyS1': city.value, // 所在城市
-          'fldBcjNrgEoh1': user && user.nickname, // 微信昵称
-          'fldDW1myivghv': user && user.headimgurl, // 微信头像
-          'fldZzdmUhkpWQ': user && user.unionid, // 微信unionid
+          '宠物姓名': text.value,
+          '手机号码': tel.value,
+          '宠物类别': ['狗'],
+          '入库时间': Date.now(),
+          '用户标签': ['京宠联萌派对&北京'],
+          '🎂宠物生日': birthday.value,
+          '所在城市': city.value,
+          '微信昵称': user && user.nickname,
+          '微信头像': user && user.headimgurl,
+          '微信ID': user && user.unionid,
         }
       }],
-      'fieldKey': 'id',
     },
   });
   console.log(req1);

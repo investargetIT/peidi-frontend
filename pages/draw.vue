@@ -89,7 +89,7 @@ export default {
       if (!record) return;
       record = JSON.parse(record);
       const runtimeConfig = useRuntimeConfig();
-      $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstGNwPDWPRFW8doGl/records', {
+      $fetch(runtimeConfig.public.APITABLE_URL + '/fusion/v1/datasheets/dstfD2Z1kElRo2vhnf/records', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -99,10 +99,9 @@ export default {
           'records': [{
             'recordId': record.recordId,
             'fields': {
-              'fldE0DSztgMVz': ['京宠联萌派对&北京', drawResult], // 用户标签
+              '用户标签': ['京宠联萌派对&北京', drawResult], // 用户标签
             }
           }],
-          'fieldKey': 'id',
         },
       });
     },
