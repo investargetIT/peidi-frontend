@@ -4,7 +4,7 @@
   const runtimeConfig = useRuntimeConfig();
   const list = ref([]);
   const total = ref(0);
-  $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstfD2Z1kElRo2vhnf/records?fields=${encodeURIComponent(['微信昵称', '微信头像'])}&fieldKey=id`, {
+  $fetch(runtimeConfig.public.APITABLE_URL + `/fusion/v1/datasheets/dstfD2Z1kElRo2vhnf/records?fields=${encodeURIComponent(['微信昵称', '微信头像'])}`, {
     headers: {
       'Authorization': `Bearer ${runtimeConfig.public.APITABLE_API_TOKEN}`,
     },
