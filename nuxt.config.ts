@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       APITABLE_DEFAULT_PASSWORD: process.env.APITABLE_DEFAULT_PASSWORD,
       DINGTALK_CORP_ID: process.env.DINGTALK_CORP_ID,
       API_BASE_URL: process.env.API_BASE_URL,
+      DJANGO_API_TOKEN: process.env.DJANGO_API_TOKEN,
     },
   },
 })
