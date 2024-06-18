@@ -4,27 +4,27 @@
   <van-row>
     <van-col span="24" class="cell">
       <div class="cell_label">今日总单量</div>
-      <div class="cell_value">1,800</div>
+      <div class="cell_value">{{ orderData && orderData[0] }}</div>
     </van-col>
   </van-row>
   <van-row>  
     <van-col span="12" class="cell">
       <div class="cell_label">订单待打印</div>
-      <div class="cell_value">1,800</div>
+      <div class="cell_value">{{ orderData && orderData[1] }}</div>
     </van-col>
     <van-col span="12" class="cell">
       <div class="cell_label">今日已打印</div>
-      <div class="cell_value">1,800</div>
+      <div class="cell_value">{{ orderData && orderData[2] }}</div>
     </van-col>
    </van-row>
    <van-row>
     <van-col span="12" class="cell">
       <div class="cell_label">实时订单待发货</div>
-      <div class="cell_value">1,800</div>
+      <div class="cell_value">{{ orderData && orderData[3] }}</div>
     </van-col>
     <van-col span="12" class="cell">
       <div class="cell_label">实时今日已发货</div>
-      <div class="cell_value">1,800</div>
+      <div class="cell_value">{{ orderData && orderData[4] }}</div>
     </van-col>
    </van-row>
   <van-row>
@@ -37,6 +37,11 @@ import * as echarts from "echarts";
 import china from "~/assets/geo_china_full.json";
 
 export default {
+  data() {
+    return {
+      orderData: [],
+    };
+  },
   mounted() {
     const runtimeConfig = useRuntimeConfig();
     $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
@@ -47,7 +52,7 @@ export default {
       },
       body: {
         name: 'GetOrderCountByCity',
-        params: ["2024-05-01", "2024-06-01"]
+        params: ["2024-03-01", "2024-04-01"]
       },
     }).then((res) => {
       if (res.code === 1000) {
@@ -61,8 +66,28 @@ export default {
         this.drawEcharts(data);
       }
     });
+    this.getOrderData().then((res) => {
+      if (res.code === 1000) {
+        console.log(res);
+        this.orderData = res.result[0];
+      }
+    });
   },
   methods: {
+    getOrderData() {
+      const runtimeConfig = useRuntimeConfig();
+      return $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
+        },
+        body: {
+          name: 'GetWMSOrderStats',
+          params: [],
+        },
+      });
+    },
     drawEcharts(data) {
       echarts.registerMap('china', china);
       const myChart = echarts.init(document.getElementById('myChart'));
