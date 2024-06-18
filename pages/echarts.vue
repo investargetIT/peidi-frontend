@@ -33,7 +33,7 @@
   <van-row>
     <van-col span="12" class="cell">
       <div class="cell_label">近30天累计发货数量</div>
-      <div class="cell_value">{{ orderData && orderData[3] }}</div>
+      <div class="cell_value">{{ orderThirtyDaysData }}</div>
     </van-col>
     <van-col span="12" class="cell">
       <div class="cell_label">年度累计发货数量</div>
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       orderData: [],
-      orderAnnualData: [],
+      orderThirtyDaysData: null,
     };
   },
   mounted() {
@@ -70,6 +70,22 @@ export default {
       if (res.code === 1000) {
         console.log(res);
         this.orderData = res.result[0];
+      }
+    });
+    const date = new Date();
+    const dateStr = date.toISOString().slice(0, 10);
+    console.log('dateStr', dateStr);
+    date.setDate(date.getDate() - 30);
+    const startDateStr = date.toISOString().slice(0, 10);
+    console.log('start', startDateStr);
+    this.getShipData(startDateStr, dateStr).then((res) => {
+      if (res.code === 1000) {
+        console.log('result', res);
+        let total = 0;
+        res.result.forEach(element => {
+          total += element[1];
+        });
+        this.orderThirtyDaysData = total;
       }
     });
   },
