@@ -11,13 +11,16 @@ import china from "echarts/map/json/china.json";
 export default {
   mounted() {
     const runtimeConfig = useRuntimeConfig();
-    $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc?name=GetOrderCountByCity', {
+    $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
       },
-      body: ["2024-01-01", "2024-01-31"],
+      body: {
+        name: 'GetOrderCountByCity',
+        params: ["2024-01-01", "2024-01-31"]
+      },
     }).then((res) => {
       if (res.code === 1000) {
         const data = [];
