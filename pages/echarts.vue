@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import echarts from "echarts";
-import china from "echarts/map/json/china.json";
+import * as echarts from "echarts";
+import china from "~/assets/geo_china_full.json";
 
 export default {
   mounted() {
@@ -30,7 +30,7 @@ export default {
             value: element[1],
           });
         });
-        this.drawEcharts(data.slice(0, 10));
+        this.drawEcharts(data);
       }
     });
   },
@@ -38,80 +38,125 @@ export default {
     drawEcharts(data) {
       echarts.registerMap('china', china);
       const myChart = echarts.init(document.getElementById('myChart'));
-      var option = {
+      const geoCoordMap = {}
+      data.forEach(element => {
+        const geoInfo = china.features.filter(f => f.properties.name == element.name);
+        const geoValue = geoInfo[0].properties.center;
+        geoCoordMap[element.name] = geoValue;
+      });
+      var convertData = function (data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+          var geoCoord = geoCoordMap[data[i].name];
+          if (geoCoord) {
+            res.push({
+              name: data[i].name,
+              value: geoCoord.concat(data[i].value)
+            });
+          }
+        }
+        return res;
+      };
+      const option = {
+        backgroundColor: '#404a59',
         title: {
-          text: '《发货地图表》TOP10',
-          // subtext: 'Data from Wikipedia',
-          // sublink:
-          //   'http://zh.wikipedia.org/wiki/%E9%A6%99%E6%B8%AF%E8%A1%8C%E6%94%BF%E5%8D%80%E5%8A%83#cite_note-12'
+          text: '发货地图表',
+          left: 'center',
+          textStyle: {
+            color: '#fff'
+          }
         },
         tooltip: {
-          trigger: 'item',
-          // formatter: '{b}<br/>{c}',
+          trigger: 'item'
         },
-        // toolbox: {
-        //   show: true,
-        //   orient: 'vertical',
-        //   left: 'right',
-        //   top: 'center',
-        //   feature: {
-        //     dataView: { readOnly: false },
-        //     restore: {},
-        //     saveAsImage: {}
-        //   }
-        // },
-        visualMap: {
-          min: data[data.length -1]['value'],
-          max: data[0]['value'],
-          text: ['高', '低'],
-          realtime: false,
-          calculable: true,
-          inRange: {
-            color: ['lightskyblue', 'yellow', 'orangered']
+        legend: {
+          orient: 'vertical',
+          y: 'bottom',
+          x: 'right',
+          data: ['发货数据'],
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        geo: {
+          map: 'china',
+          label: {
+            emphasis: {
+              show: true
+            }
+          },
+          roam: true,
+          itemStyle: {
+            normal: {
+              areaColor: '#323c48',
+              borderColor: '#111'
+            },
+            emphasis: {
+              areaColor: '#2a333d'
+            }
           }
         },
         series: [
           {
             name: '发货数据',
-            type: 'map',
-            map: 'china',
-            // label: {
-            //   show: true
-            // },
-            data,
-            nameMap: {
-              '广东': '广东省',
-              '江苏': '江苏省',
-              '上海': '上海市',
-              '浙江': '浙江省',
-              '北京': '北京市',
-              '四川': '四川省',
-              '山东': '山东省',
-              '湖北': '湖北省',
-              '安徽': '安徽省',
-              '河南': '河南省',
-              '湖南': '湖南省',
-              '辽宁': '辽宁省',
-              '河北': '河北省',
-              '福建': '福建省',
-              '重庆': '重庆市',
-              '陕西': '陕西省',
-              '天津': '天津市',
-              '江西': '江西省',
-              '广西': '广西壮族自治区',
-              '黑龙江': '黑龙江省',
-              '云南': '云南省',
-              '山西': '山西省',
-              '贵州': '贵州省',
-              '吉林': '吉林省',
-              '内蒙古': '内蒙古自治区',
-              '海南': '海南省',
-              '甘肃': '甘肃省',
-              '宁夏': '宁夏回族自治区',
-              '青海': '青海省',
-              '新疆': '新疆维吾尔自治区',
-              '西藏': '西藏自治区',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: convertData(data),
+            symbolSize: function (val) {
+              return val[2] / 1000;
+            },
+            encode: {
+              value: 2
+            },
+            label: {
+              normal: {
+                formatter: '{@[2]}',
+                position: 'right',
+                show: false
+              },
+              emphasis: {
+                show: true
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: '#ddb926'
+              }
             }
+          },
+          {
+            name: 'Top 10',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: convertData(data.sort(function (a, b) {
+              return b.value - a.value;
+            }).slice(0, 10)),
+            encode: {
+              value: 2
+            },
+            symbolSize: function (val) {
+              return val[2] / 1000;
+            },
+            showEffectOn: 'render',
+            rippleEffect: {
+              brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+              normal: {
+                formatter: '{@[2]}',
+                position: 'right',
+                show: false,
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: '#f4e925',
+                shadowBlur: 10,
+                shadowColor: '#333'
+              }
+            },
+            zlevel: 1
           }
         ]
       };
