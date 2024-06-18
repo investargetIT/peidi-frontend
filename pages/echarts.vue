@@ -1,6 +1,34 @@
 <template>
+  <h2 style="text-align: center;">订单数据</h2>
+  <h3 style="text-align: center">1.发货数据</h3>
   <van-row>
-    <div id="myChart" style="width: 100vw;height: 100vh"></div>
+    <van-col span="24" class="cell">
+      <div class="cell_label">今日总单量</div>
+      <div class="cell_value">1,800</div>
+    </van-col>
+  </van-row>
+  <van-row>  
+    <van-col span="12" class="cell">
+      <div class="cell_label">订单待打印</div>
+      <div class="cell_value">1,800</div>
+    </van-col>
+    <van-col span="12" class="cell">
+      <div class="cell_label">今日已打印</div>
+      <div class="cell_value">1,800</div>
+    </van-col>
+   </van-row>
+   <van-row>
+    <van-col span="12" class="cell">
+      <div class="cell_label">实时订单待发货</div>
+      <div class="cell_value">1,800</div>
+    </van-col>
+    <van-col span="12" class="cell">
+      <div class="cell_label">实时今日已发货</div>
+      <div class="cell_value">1,800</div>
+    </van-col>
+   </van-row>
+  <van-row>
+    <div id="myChart" style="width: 100vw;height: 100vw"></div>
   </van-row>
 </template>
 
@@ -19,7 +47,7 @@ export default {
       },
       body: {
         name: 'GetOrderCountByCity',
-        params: ["2024-01-01", "2024-01-31"]
+        params: ["2024-05-01", "2024-06-01"]
       },
     }).then((res) => {
       if (res.code === 1000) {
@@ -41,8 +69,10 @@ export default {
       const geoCoordMap = {}
       data.forEach(element => {
         const geoInfo = china.features.filter(f => f.properties.name == element.name);
-        const geoValue = geoInfo[0].properties.center;
-        geoCoordMap[element.name] = geoValue;
+        if (geoInfo.length > 0) {
+          const geoValue = geoInfo[0].properties.center;
+          geoCoordMap[element.name] = geoValue;
+        }
       });
       var convertData = function (data) {
         var res = [];
@@ -60,7 +90,7 @@ export default {
       const option = {
         backgroundColor: '#404a59',
         title: {
-          text: '发货地图表',
+          text: '2.发货地图',
           left: 'center',
           textStyle: {
             color: '#fff'
@@ -73,7 +103,7 @@ export default {
           orient: 'vertical',
           y: 'bottom',
           x: 'right',
-          data: ['发货数据'],
+          data: ['订单数量'],
           textStyle: {
             color: '#fff'
           }
@@ -82,10 +112,10 @@ export default {
           map: 'china',
           label: {
             emphasis: {
-              show: true
+              show: false
             }
           },
-          roam: true,
+          roam: false,
           itemStyle: {
             normal: {
               areaColor: '#323c48',
@@ -94,11 +124,11 @@ export default {
             emphasis: {
               areaColor: '#2a333d'
             }
-          }
+          },
         },
         series: [
           {
-            name: '发货数据',
+            name: '订单数量',
             type: 'scatter',
             coordinateSystem: 'geo',
             data: convertData(data),
@@ -165,3 +195,18 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.cell {
+  text-align: center;
+  padding: 20px 0;
+}
+.cell_label {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.cell_value {
+  font-size: 24px;
+  font-weight: bold;
+}
+</style>
