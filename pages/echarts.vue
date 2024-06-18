@@ -7,7 +7,7 @@
       <div class="cell_value">{{ orderData && orderData[0] }}</div>
     </van-col>
   </van-row>
-  <van-row>  
+  <van-row>
     <van-col span="12" class="cell">
       <div class="cell_label">订单待打印</div>
       <div class="cell_value">{{ orderData && orderData[1] }}</div>
@@ -16,8 +16,8 @@
       <div class="cell_label">今日已打印</div>
       <div class="cell_value">{{ orderData && orderData[2] }}</div>
     </van-col>
-   </van-row>
-   <van-row>
+  </van-row>
+  <van-row>
     <van-col span="12" class="cell">
       <div class="cell_label">实时订单待发货</div>
       <div class="cell_value">{{ orderData && orderData[3] }}</div>
@@ -26,9 +26,19 @@
       <div class="cell_label">实时今日已发货</div>
       <div class="cell_value">{{ orderData && orderData[4] }}</div>
     </van-col>
-   </van-row>
+  </van-row>
+  <h3 style="text-align: center">2.发货地图</h3>
+  <div id="myChart" style="width: 100vw;height: 360px;"></div>
+  <h3 style="text-align: center">3.年度发货数量</h3>
   <van-row>
-    <div id="myChart" style="width: 100vw;height: 100vw"></div>
+    <van-col span="12" class="cell">
+      <div class="cell_label">近30天累计发货数量</div>
+      <div class="cell_value">{{ orderData && orderData[3] }}</div>
+    </van-col>
+    <van-col span="12" class="cell">
+      <div class="cell_label">年度累计发货数量</div>
+      <div class="cell_value">{{ orderData && orderData[4] }}</div>
+    </van-col>
   </van-row>
 </template>
 
@@ -40,21 +50,11 @@ export default {
   data() {
     return {
       orderData: [],
+      orderAnnualData: [],
     };
   },
   mounted() {
-    const runtimeConfig = useRuntimeConfig();
-    $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
-      },
-      body: {
-        name: 'GetOrderCountByCity',
-        params: ["2024-03-01", "2024-04-01"]
-      },
-    }).then((res) => {
+   this.getShipData('2024-01-01', '2024-01-31').then((res) => {
       if (res.code === 1000) {
         const data = [];
         res.result.forEach(element => {
@@ -85,6 +85,20 @@ export default {
         body: {
           name: 'GetWMSOrderStats',
           params: [],
+        },
+      });
+    },
+    getShipData(startDate, endDate) {
+      const runtimeConfig = useRuntimeConfig();
+      return $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
+        },
+        body: {
+          name: 'GetOrderCountByCity',
+          params: [startDate, endDate],
         },
       });
     },
@@ -119,7 +133,8 @@ export default {
           left: 'center',
           textStyle: {
             color: '#fff'
-          }
+          },
+          show: false,
         },
         tooltip: {
           trigger: 'item'
