@@ -37,7 +37,7 @@
     </van-col>
     <van-col span="12" class="cell">
       <div class="cell_label">年度累计发货数量</div>
-      <div class="cell_value">{{ orderData && orderData[4] }}</div>
+      <div class="cell_value">{{ orderYearData }}</div>
     </van-col>
   </van-row>
 </template>
@@ -51,6 +51,7 @@ export default {
     return {
       orderData: [],
       orderThirtyDaysData: null,
+      orderYearData: null,
     };
   },
   mounted() {
@@ -86,6 +87,18 @@ export default {
           total += element[1];
         });
         this.orderThirtyDaysData = total;
+      }
+    });
+    const year = new Date().getFullYear()
+    console.log('year', year);
+    this.getShipData(year + '-01-01', dateStr).then((res) => {
+      if (res.code === 1000) {
+        console.log('result', res);
+        let total = 0;
+        res.result.forEach(element => {
+          total += element[1];
+        });
+        this.orderYearData = total;
       }
     });
   },
