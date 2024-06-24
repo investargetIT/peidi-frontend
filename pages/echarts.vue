@@ -45,6 +45,8 @@
       <div class="cell_value">{{ orderYearData }}</div>
     </van-col>
   </van-row>
+  <h2 style="text-align: center;">供应链数据</h2>
+  <h3 style="text-align: center">商品现有库存</h3>
 </template>
 
 <script>
@@ -97,7 +99,6 @@ export default {
       const amount = [];
       res.forEach((element, index) => {
         const result = this.groupGoodsSalesDataBySPU(element.result);
-        console.log('result1', result);
         result.forEach(element => {
           const i = channel.indexOf(element.channel);
           if (i > -1) {
@@ -153,6 +154,9 @@ export default {
         this.orderYearData = total;
       }
     });
+    this.getSupplyChainData().then(res => {
+      console.log(res);
+    });
   },
   methods: {
     getSalesData(startDate, endDate) {
@@ -180,6 +184,20 @@ export default {
         body: {
           name: 'GetSalesAmountRankingBySPU',
           params: [startDate, endDate],
+        },
+      });
+    },
+    getSupplyChainData() {
+      const runtimeConfig = useRuntimeConfig();
+      return $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
+        },
+        body: {
+          name: 'GetSimplifiedStockDetails',
+          params: [],
         },
       });
     },
