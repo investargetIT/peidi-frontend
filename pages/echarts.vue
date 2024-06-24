@@ -46,7 +46,8 @@
     </van-col>
   </van-row>
   <h2 style="text-align: center;">供应链数据</h2>
-  <h3 style="text-align: center">商品现有库存</h3>
+  <h3 style="text-align: center">1.商品现有库存</h3>
+  <div id="chart_supply_chain" style="width: 100vw;height: 300px;"></div>
 </template>
 
 <script>
@@ -155,7 +156,10 @@ export default {
       }
     });
     this.getSupplyChainData().then(res => {
-      console.log(res);
+      if (res.code == 1000) {
+        const data = this.groupSupplyChainDataByBrand(res.result);
+        this.drawSupplyChainChart(data);
+      }
     });
   },
   methods: {
@@ -259,6 +263,34 @@ export default {
         } else {
           channel.push(element[1]);
           amount.push(parseInt(element[2]));
+        }
+      });
+      const result = [];
+      for (let index = 0; index < channel.length; index++) {
+        const name = channel[index];
+        const value = amount[index];
+        result.push({ channel: name, amount: value })
+      }
+      return result;
+    },
+    groupSupplyChainDataByBrand(data) {
+      const channel = ['库存', '可发库存', '待发货量'];
+      const amount = [];
+      data.forEach(element => {
+        if (amount[0]) {
+          amount[0] += element[3];
+        } else {
+          amount[0] = element[3];
+        }
+        if (amount[1]) {
+          amount[1] += element[4];
+        } else {
+          amount[1] = element[4];
+        }
+        if (amount[2]) {
+          amount[2] += element[5];
+        } else {
+          amount[2] = element[5];
         }
       });
       const result = [];
@@ -464,6 +496,30 @@ export default {
           type: 'value'
         },
         series: data.map(m => ({ name: m.name, type: 'line', data: m.data })),
+      };
+      myChart.setOption(option);
+    },
+    drawSupplyChainChart(data) {
+      const chartDom = document.getElementById('chart_supply_chain');
+      const myChart = echarts.init(chartDom);
+      const option = {
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: '50%',
+            data: data.map(m => ({ value: m.amount, name: m.channel })),
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
       };
       myChart.setOption(option);
     },
