@@ -33,7 +33,7 @@
     </van-col>
   </van-row>
   <h3 style="text-align: center">2.发货地图</h3>
-  <div id="myChart" style="width: 100vw;height: 360px;"></div>
+  <div id="myChart" style="width: 100vw;height: 540px;"></div>
   <h3 style="text-align: center">3.年度发货数量</h3>
   <van-row>
     <van-col span="12" class="cell">
@@ -83,7 +83,7 @@ export default {
           }
         });
       });
-      this.drawShopSalesChart(amount);
+      this.drawShopSalesChart(amount.slice(0, 5));
     });
 
     Promise.all([
@@ -278,25 +278,25 @@ export default {
       const option = {
         backgroundColor: '#404a59',
         title: {
-          text: '2.发货地图',
+          text: '2024年1月发货地图',
+          top: 20,
           left: 'center',
           textStyle: {
             color: '#fff'
           },
-          show: false,
         },
         tooltip: {
           trigger: 'item'
         },
-        legend: {
-          orient: 'vertical',
-          y: 'bottom',
-          x: 'right',
-          data: ['订单数量'],
-          textStyle: {
-            color: '#fff'
-          }
-        },
+        // legend: {
+        //   orient: 'vertical',
+        //   y: 'bottom',
+        //   x: 'right',
+        //   data: ['订单数量'],
+        //   textStyle: {
+        //     color: '#fff'
+        //   }
+        // },
         geo: {
           map: 'china',
           label: {
@@ -386,7 +386,7 @@ export default {
       const myChart = echarts.init(chartDom);
       const option = {
         title: {
-          text: '2024年各渠道销售额（月度）',
+          text: '2024年Top5渠道销售额（月度）',
           left: 'center'
         },
         tooltip: {
