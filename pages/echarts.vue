@@ -3,7 +3,7 @@
   <h3 style="text-align: center">1.店铺总业绩展示</h3>
   <div id="chart_shop_sales" style="width: 100vw;height: 360px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
-
+  <div id="chart_goods_sales" style="width: 100vw;height: 360px;"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
   <van-row>
@@ -82,9 +82,37 @@ export default {
             amount.push({ name: element.channel, data: value });
           }
         });
-        this.drawShopSalesChart(amount);
       });
-    })
+      this.drawShopSalesChart(amount);
+    });
+
+    Promise.all([
+      this.getGoodsSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
+      // this.getGoodsSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
+      this.getGoodsSalesData('2024-03-01 00:00:00', '2024-03-31 23:59:59'),
+      this.getGoodsSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
+      this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
+    ]).then(res => {
+      const channel = [];
+      const amount = [];
+      res.forEach((element, index) => {
+        const result = this.groupGoodsSalesDataBySPU(element.result);
+        console.log('result1', result);
+        result.forEach(element => {
+          const i = channel.indexOf(element.channel);
+          if (i > -1) {
+            amount[i]['data'][index] = element.amount;
+          } else {
+            channel.push(element.channel);
+            const value = [];
+            value[index] = element.amount;
+            amount.push({ name: element.channel, data: value });
+          }
+        });
+      });
+      this.drawGoodsSalesChart(amount.slice(0, 5));
+    });
+
     this.getShipData('2024-01-01', '2024-01-31').then((res) => {
       if (res.code === 1000) {
         const data = [];
@@ -99,19 +127,15 @@ export default {
     });
     this.getOrderData().then((res) => {
       if (res.code === 1000) {
-        console.log(res);
         this.orderData = res.result[0];
       }
     });
     const date = new Date();
     const dateStr = date.toISOString().slice(0, 10);
-    console.log('dateStr', dateStr);
     date.setDate(date.getDate() - 30);
     const startDateStr = date.toISOString().slice(0, 10);
-    console.log('start', startDateStr);
     this.getShipData(startDateStr, dateStr).then((res) => {
       if (res.code === 1000) {
-        console.log('result', res);
         let total = 0;
         res.result.forEach(element => {
           total += element[1];
@@ -120,10 +144,8 @@ export default {
       }
     });
     const year = new Date().getFullYear()
-    console.log('year', year);
     this.getShipData(year + '-01-01', dateStr).then((res) => {
       if (res.code === 1000) {
-        console.log('result', res);
         let total = 0;
         res.result.forEach(element => {
           total += element[1];
@@ -143,6 +165,20 @@ export default {
         },
         body: {
           name: 'GetSalesAmountRanking',
+          params: [startDate, endDate],
+        },
+      });
+    },
+    getGoodsSalesData(startDate, endDate) {
+      const runtimeConfig = useRuntimeConfig();
+      return $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
+        },
+        body: {
+          name: 'GetSalesAmountRankingBySPU',
           params: [startDate, endDate],
         },
       });
@@ -185,6 +221,26 @@ export default {
         } else {
           channel.push(element[0]);
           amount.push(0);
+        }
+      });
+      const result = [];
+      for (let index = 0; index < channel.length; index++) {
+        const name = channel[index];
+        const value = amount[index];
+        result.push({ channel: name, amount: value })
+      }
+      return result;
+    },
+    groupGoodsSalesDataBySPU(data) {
+      const channel = [];
+      const amount = [];
+      data.forEach(element => {
+        const i = channel.indexOf(element[1]);
+        if (i > -1) {
+          amount[i] += parseInt(element[2]);
+        } else {
+          channel.push(element[1]);
+          amount.push(parseInt(element[2]));
         }
       });
       const result = [];
@@ -330,7 +386,7 @@ export default {
       const myChart = echarts.init(chartDom);
       const option = {
         title: {
-          text: '2024年渠道销售数据',
+          text: '2024年各渠道销售额（月度）',
           left: 'center'
         },
         tooltip: {
@@ -351,6 +407,40 @@ export default {
           type: 'category',
           boundaryGap: false,
           data: ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: data.map(m => ({ name: m.name, type: 'line', data: m.data })),
+      };
+      myChart.setOption(option);
+    },
+    drawGoodsSalesChart(data) {
+      const chartDom = document.getElementById('chart_goods_sales');
+      const myChart = echarts.init(chartDom);
+      const option = {
+        title: {
+          text: '2024年Top5SPU销售额（月度）',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          top: 40,
+          data: data.map(m => m.name)
+        },
+        grid: {
+          top: 120,
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['Jan', 'Mar', 'Apr', 'May']
         },
         yAxis: {
           type: 'value'
