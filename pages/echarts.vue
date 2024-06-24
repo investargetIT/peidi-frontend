@@ -115,7 +115,7 @@ export default {
       this.drawGoodsSalesChart(amount.slice(0, 5));
     });
 
-    this.getShipData('2024-01-01', '2024-01-31').then((res) => {
+    this.getShipData('2024-01-01', '2024-05-31').then((res) => {
       if (res.code === 1000) {
         const data = [];
         res.result.forEach(element => {
@@ -328,7 +328,7 @@ export default {
       const option = {
         backgroundColor: '#404a59',
         title: {
-          text: '2024年1月发货地图',
+          text: '2024年1-5月发货地图',
           top: 20,
           left: 'center',
           textStyle: {
@@ -372,7 +372,7 @@ export default {
             coordinateSystem: 'geo',
             data: convertData(data),
             symbolSize: function (val) {
-              return val[2] / 1000;
+              return val[2] / 4000;
             },
             encode: {
               value: 2
@@ -404,7 +404,7 @@ export default {
               value: 2
             },
             symbolSize: function (val) {
-              return val[2] / 1000;
+              return val[2] / 4000;
             },
             showEffectOn: 'render',
             rippleEffect: {
