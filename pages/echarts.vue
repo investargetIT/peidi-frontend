@@ -36,7 +36,9 @@
   <h3 style="text-align: center">2.发货地图</h3>
   <div id="myChart" style="width: 100vw;height: 540px;"></div>
   <h3 style="text-align: center">3.年度发货数量</h3>
-  <van-row>
+  <div id="chart_ship_data" style="width: 100vw;height: 300px;"></div>
+
+  <!-- <van-row>
     <van-col span="12" class="cell">
       <div class="cell_label">近30天累计发货数量</div>
       <div class="cell_value">{{ orderThirtyDaysData }}</div>
@@ -45,7 +47,7 @@
       <div class="cell_label">年度累计发货数量</div>
       <div class="cell_value">{{ orderYearData }}</div>
     </van-col>
-  </van-row>
+  </van-row> -->
   <h2 style="text-align: center;">供应链数据</h2>
   <h3 style="text-align: center">1.商品现有库存</h3>
   <div id="chart_supply_chain" style="width: 100vw;height: 300px;"></div>
@@ -157,6 +159,26 @@ export default {
         });
         this.orderYearData = total;
       }
+    });
+    Promise.all([
+      this.getShipData(startDateStr, dateStr),
+      this.getShipData(year + '-01-01', dateStr),
+    ]).then(res => {
+      const value = [];
+      res.forEach((element, index) => {
+        if (element.code === 1000) {
+          let total = 0;
+          element.result.forEach(element => {
+            total += element[1];
+          });
+          if (index == 0) {
+            value.push({ name: '近30天累计发货数量', value: total });
+          } else {
+            value.push({ name: '年度累计发货数量', value: total });
+          }
+        }
+      });
+      this.drawShipDataChart(value);
     });
     this.getSupplyChainData().then(res => {
       if (res.code == 1000) {
@@ -539,6 +561,30 @@ export default {
     },
     drawWMSDataChart(data) {
       const chartDom = document.getElementById('chart_wms_data');
+      const myChart = echarts.init(chartDom);
+      const option = {
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: '50%',
+            data,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    drawShipDataChart(data) {
+      const chartDom = document.getElementById('chart_ship_data');
       const myChart = echarts.init(chartDom);
       const option = {
         tooltip: {
