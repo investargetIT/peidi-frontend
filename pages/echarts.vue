@@ -6,7 +6,7 @@
   <div id="chart_goods_sales" style="width: 100vw;height: 360px;"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
-  <van-row>
+  <!-- <van-row>
     <van-col span="24" class="cell">
       <div class="cell_label">今日总单量</div>
       <div class="cell_value">{{ orderData && orderData[0] }}</div>
@@ -31,7 +31,8 @@
       <div class="cell_label">实时今日已发货</div>
       <div class="cell_value">{{ orderData && orderData[4] }}</div>
     </van-col>
-  </van-row>
+  </van-row> -->
+  <div id="chart_wms_data" style="width: 100vw;height: 300px;"></div>
   <h3 style="text-align: center">2.发货地图</h3>
   <div id="myChart" style="width: 100vw;height: 540px;"></div>
   <h3 style="text-align: center">3.年度发货数量</h3>
@@ -130,6 +131,8 @@ export default {
     this.getOrderData().then((res) => {
       if (res.code === 1000) {
         this.orderData = res.result[0];
+        const data = this.groupWMSData(res.result[0]);
+        this.drawWMSDataChart(data);
       }
     });
     const date = new Date();
@@ -298,6 +301,17 @@ export default {
         const name = channel[index];
         const value = amount[index];
         result.push({ channel: name, amount: value })
+      }
+      return result;
+    },
+    groupWMSData(data) {
+      const channel = ['今日总单量', '订单待打印', '今日已打印', '实时订单待发货', '实时今日已发货'];
+      const amount = data;
+      const result = [];
+      for (let index = 0; index < channel.length; index++) {
+        const name = channel[index];
+        const value = amount[index];
+        result.push({ name, value })
       }
       return result;
     },
@@ -511,6 +525,30 @@ export default {
             type: 'pie',
             radius: '50%',
             data: data.map(m => ({ value: m.amount, name: m.channel })),
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    drawWMSDataChart(data) {
+      const chartDom = document.getElementById('chart_wms_data');
+      const myChart = echarts.init(chartDom);
+      const option = {
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: '50%',
+            data,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
