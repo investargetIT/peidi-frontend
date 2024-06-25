@@ -51,6 +51,10 @@
   <h2 style="text-align: center;">供应链数据</h2>
   <h3 style="text-align: center">1.商品现有库存</h3>
   <div id="chart_supply_chain" style="width: 100%;height: 300px;"></div>
+
+  <h2 style="text-align: center;">客服数据</h2>
+  <h3 style="text-align: center">1.部分店铺DSR</h3>
+  <div id="chart_shop_dsr" style="width: 100%;height: 300px;"></div>
 </template>
 
 <script>
@@ -186,6 +190,12 @@ export default {
         this.drawSupplyChainChart(data);
       }
     });
+    this.getShopDSRData().then(res => {
+      if (res.code == 1000) {
+        const data = this.groupShopDSRData(res.result.slice(0, 3));
+        this.drawShopDSRChart(data);
+      }
+    });
   },
   methods: {
     getSalesData(startDate, endDate) {
@@ -255,6 +265,20 @@ export default {
         body: {
           name: 'GetOrderCountByCity',
           params: [startDate, endDate],
+        },
+      });
+    },
+    getShopDSRData() {
+      const runtimeConfig = useRuntimeConfig();
+      return $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
+        },
+        body: {
+          name: 'GetNeedSummaryRecords',
+          params: [],
         },
       });
     },
@@ -333,6 +357,15 @@ export default {
       for (let index = 0; index < channel.length; index++) {
         const name = channel[index];
         const value = amount[index];
+        result.push({ name, value })
+      }
+      return result;
+    },
+    groupShopDSRData(data) {
+      const result = [];
+      for (let index = 0; index < data.length; index++) {
+        const name = data[index][3];
+        const value = data[index].slice(4, 7);
         result.push({ name, value })
       }
       return result;
@@ -602,6 +635,35 @@ export default {
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
             }
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    drawShopDSRChart(data) {
+      const chartDom = document.getElementById('chart_shop_dsr');
+      const myChart = echarts.init(chartDom);
+      const option = {
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          bottom: 0,
+          data: data.map(m => m.name),
+        },
+        radar: {
+          shape: 'circle',
+          indicator: [
+            { name: '物流评分', max: 5 },
+            { name: '商品评分', max: 5 },
+            { name: '服务评分', max: 5 },
+          ]
+        },
+        series: [
+          {
+            name: '店铺评分',
+            type: 'radar',
+            data,
           }
         ]
       };
