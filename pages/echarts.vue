@@ -1,9 +1,9 @@
 <template>
   <h2 style="text-align: center;">销售数据</h2>
   <h3 style="text-align: center">1.店铺总业绩展示</h3>
-  <div id="chart_shop_sales" style="width: 100vw;height: 360px;"></div>
+  <div id="chart_shop_sales" style="width: 100%;height: 360px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
-  <div id="chart_goods_sales" style="width: 100vw;height: 360px;"></div>
+  <div id="chart_goods_sales" style="width: 100%;height: 360px;"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
   <!-- <van-row>
@@ -32,11 +32,11 @@
       <div class="cell_value">{{ orderData && orderData[4] }}</div>
     </van-col>
   </van-row> -->
-  <div id="chart_wms_data" style="width: 100vw;height: 300px;"></div>
+  <div id="chart_wms_data" style="width: 100%;height: 300px;"></div>
   <h3 style="text-align: center">2.发货地图</h3>
-  <div id="myChart" style="width: 100vw;height: 540px;"></div>
+  <div id="myChart" style="width: 100%;height: 540px;"></div>
   <h3 style="text-align: center">3.年度发货数量</h3>
-  <div id="chart_ship_data" style="width: 100vw;height: 300px;"></div>
+  <div id="chart_ship_data" style="width: 100%;height: 300px;"></div>
 
   <!-- <van-row>
     <van-col span="12" class="cell">
@@ -50,7 +50,7 @@
   </van-row> -->
   <h2 style="text-align: center;">供应链数据</h2>
   <h3 style="text-align: center">1.商品现有库存</h3>
-  <div id="chart_supply_chain" style="width: 100vw;height: 300px;"></div>
+  <div id="chart_supply_chain" style="width: 100%;height: 300px;"></div>
 </template>
 
 <script>
@@ -611,10 +611,7 @@ export default {
 }
 </script>
 
-<style>
-body {
-  margin: 0;
-}
+<style scoped>
 .cell {
   text-align: center;
   padding: 20px 0;
