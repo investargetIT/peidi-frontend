@@ -49,8 +49,21 @@
     </van-col>
   </van-row> -->
   <h2 style="text-align: center;">供应链数据</h2>
-  <h3 style="text-align: center">1.商品现有库存</h3>
-  <div id="chart_supply_chain" style="width: 100%;height: 300px;"></div>
+  <h3 style="text-align: center">1.部分商品现有库存</h3>
+  <!-- <div id="chart_supply_chain" style="width: 100%;height: 300px;"></div> -->
+  <div style="display: flex;width: 100%;margin: 0 auto;font-weight: bold;">
+    <div style="flex: 1;">商品名称</div>
+    <div style="flex: 1;text-align: center;">库存</div>
+    <div style="flex: 1;text-align: center;">可发库存</div>
+    <div style="flex: 1;text-align: center;">待发货量</div>
+  </div>
+
+  <div v-for="item in stockData" style="display: flex;align-items:center;width: 100%;margin: 10px auto;font-size: 14px;">
+    <div style="flex: 1;">{{ item[0] }}</div>
+    <div style="flex: 1;text-align: center;">{{ item[3] }}</div>
+    <div style="flex: 1;text-align: center;">{{ item[4] }}</div>
+    <div style="flex: 1;text-align: center;">{{ item[5] }}</div>
+  </div>
 
   <h2 style="text-align: center;">客服数据</h2>
   <h3 style="text-align: center">1.部分店铺DSR</h3>
@@ -67,6 +80,7 @@ export default {
       orderData: [],
       orderThirtyDaysData: null,
       orderYearData: null,
+      stockData: [],
     };
   },
   mounted() {
@@ -187,7 +201,9 @@ export default {
     this.getSupplyChainData().then(res => {
       if (res.code == 1000) {
         const data = this.groupSupplyChainDataByBrand(res.result);
-        this.drawSupplyChainChart(data);
+        // this.drawSupplyChainChart(data);
+        this.stockData = data.slice(0, 5);
+        console.log(this.stockData);
       }
     });
     this.getShopDSRData().then(res => {
@@ -323,6 +339,10 @@ export default {
       return result;
     },
     groupSupplyChainDataByBrand(data) {
+      data = data.sort((prev, next) => {
+        return next[5] - prev[5];
+      });
+      return data;
       const channel = ['库存', '可发库存', '待发货量'];
       const amount = [];
       data.forEach(element => {
