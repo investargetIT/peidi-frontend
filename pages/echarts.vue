@@ -98,11 +98,11 @@ export default {
         result.forEach(element => {
           const i = channel.indexOf(element.channel);
           if (i > -1) {
-            amount[i]['data'][index] = element.amount;
+            amount[i]['data'][index] = parseInt(element.amount);
           } else {
             channel.push(element.channel);
             const value = [];
-            value[index] = element.amount;
+            value[index] = parseInt(element.amount);
             amount.push({ name: element.channel, data: value });
           }
         });
@@ -304,10 +304,10 @@ export default {
       data.forEach(element => {
         const i = channel.indexOf(element[0]);
         if (i > -1) {
-          amount[i] += parseInt(element[3]);
+          amount[i] += element[3];
         } else {
           channel.push(element[0]);
-          amount.push(0);
+          amount.push(element[3]);
         }
       });
       const result = [];
