@@ -112,7 +112,7 @@ export default {
 
     Promise.all([
       this.getGoodsSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
-      // this.getGoodsSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
+      this.getGoodsSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
       this.getGoodsSalesData('2024-03-01 00:00:00', '2024-03-31 23:59:59'),
       this.getGoodsSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
       this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
@@ -199,6 +199,7 @@ export default {
       this.drawShipDataChart(value);
     });
     this.getSupplyChainData().then(res => {
+      console.log(res);
       if (res.code == 1000) {
         const data = this.groupSupplyChainDataByBrand(res.result);
         // this.drawSupplyChainChart(data);
