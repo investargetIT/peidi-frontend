@@ -90,6 +90,7 @@ export default {
       this.getSalesData('2024-03-01 00:00:00', '2024-03-31 23:59:59'),
       this.getSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
       this.getSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
+      this.getSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
     ]).then(res => {
       const channel = [];
       const amount = [];
@@ -116,6 +117,7 @@ export default {
       this.getGoodsSalesData('2024-03-01 00:00:00', '2024-03-31 23:59:59'),
       this.getGoodsSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
       this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
+      this.getGoodsSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
     ]).then(res => {
       const channel = [];
       const amount = [];
@@ -544,7 +546,7 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         },
         yAxis: {
           type: 'value'
@@ -578,7 +580,7 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Jan', 'Mar', 'Apr', 'May']
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         },
         yAxis: {
           type: 'value'
