@@ -19,6 +19,7 @@
     "nuxt": "^3.10.3",
     "vant": "^4.8.5",
     "vue": "^3.4.19",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue3-easy-data-table": "^1.5.47"
   }
 }
