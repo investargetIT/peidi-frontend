@@ -3,7 +3,7 @@
   <h3 style="text-align: center">1.店铺总业绩展示</h3>
   <div id="chart_shop_sales" style="width: 100%;height: 360px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
-  <div id="chart_goods_sales" style="width: 100%;height: 360px;"></div>
+  <div id="chart_goods_sales" style="width: 100%;height: 560px;"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
   <!-- <van-row>
@@ -108,7 +108,7 @@ export default {
           }
         });
       });
-      this.drawShopSalesChart(amount.slice(0, 5));
+      this.drawShopSalesChart(amount);
     });
 
     Promise.all([
@@ -135,7 +135,7 @@ export default {
           }
         });
       });
-      this.drawGoodsSalesChart(amount.slice(0, 5));
+      this.drawGoodsSalesChart(amount);
     });
 
     this.getShipData('2024-01-01', '2024-05-31').then((res) => {
@@ -526,7 +526,7 @@ export default {
       const myChart = echarts.init(chartDom);
       const option = {
         title: {
-          text: '2024年Top5渠道销售额（月度）',
+          text: '2024年渠道销售额（月度）',
           left: 'center'
         },
         tooltip: {
@@ -560,7 +560,7 @@ export default {
       const myChart = echarts.init(chartDom);
       const option = {
         title: {
-          text: '2024年Top5SPU销售额（月度）',
+          text: '2024年SPU销售额（月度）',
           left: 'center'
         },
         tooltip: {
@@ -571,7 +571,7 @@ export default {
           data: data.map(m => m.name)
         },
         grid: {
-          top: 120,
+          top: 280,
           left: '3%',
           right: '4%',
           bottom: '3%',
