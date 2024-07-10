@@ -199,12 +199,10 @@ export default {
       this.drawShipDataChart(value);
     });
     this.getSupplyChainData().then(res => {
-      console.log(res);
       if (res.code == 1000) {
         const data = this.groupSupplyChainDataByBrand(res.result);
         // this.drawSupplyChainChart(data);
         this.stockData = data.slice(0, 5);
-        console.log(this.stockData);
       }
     });
     this.getShopDSRData().then(res => {
@@ -238,7 +236,7 @@ export default {
           'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
         },
         body: {
-          name: 'GetSalesAmountRankingBySPU',
+          name: 'CalculateSPUPerformance',
           params: [startDate, endDate],
         },
       });
@@ -323,12 +321,12 @@ export default {
       const channel = [];
       const amount = [];
       data.forEach(element => {
-        const i = channel.indexOf(element[1]);
+        const i = channel.indexOf(element[0]);
         if (i > -1) {
-          amount[i] += parseInt(element[2]);
+          amount[i] += parseInt(element[1]);
         } else {
-          channel.push(element[1]);
-          amount.push(parseInt(element[2]));
+          channel.push(element[0]);
+          amount.push(parseInt(element[1]));
         }
       });
       const result = [];
