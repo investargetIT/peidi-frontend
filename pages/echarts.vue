@@ -104,6 +104,7 @@ export default {
     };
   },
   mounted() {
+    // this.getShopSalesDate('天猫', '2024-01-01 00:00:00', '2024-01-31 23:59:59').then(res => console.log('res', res));
     Promise.all([
       this.getSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
       this.getSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
@@ -255,6 +256,20 @@ export default {
         body: {
           name: 'GetSalesAmountRanking',
           params: [startDate, endDate],
+        },
+      });
+    },
+    getShopSalesDate(shopName, startDate, endDate) {
+      const runtimeConfig = useRuntimeConfig();
+      return $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
+        },
+        body: {
+          name: 'GetSalesAmountRankingByChannel',
+          params: [shopName, startDate, endDate],
         },
       });
     },
