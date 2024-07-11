@@ -328,10 +328,10 @@ export default {
       data.forEach(element => {
         const i = channel.indexOf(element[0]);
         if (i > -1) {
-          amount[i] += element[3];
+          amount[i] += element[1];
         } else {
           channel.push(element[0]);
-          amount.push(element[3]);
+          amount.push(element[1]);
         }
       });
       const result = [];
