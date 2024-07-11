@@ -596,15 +596,16 @@ export default {
           trigger: 'axis'
         },
         legend: {
+          type: 'scroll',
+          orient: 'vertical',
           top: 40,
+          right: 0,
           data: data.map(m => m.name)
         },
         grid: {
-          top: 280,
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
+          left: 0,
+          right: 140,
+          containLabel: true,
         },
         xAxis: {
           type: 'category',
