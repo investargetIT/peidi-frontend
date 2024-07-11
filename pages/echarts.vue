@@ -49,9 +49,9 @@
     </van-col>
   </van-row> -->
   <h2 style="text-align: center;">供应链数据</h2>
-  <h3 style="text-align: center">1.部分商品现有库存</h3>
+  <h3 style="text-align: center">1.商品库存</h3>
   <!-- <div id="chart_supply_chain" style="width: 100%;height: 300px;"></div> -->
-  <div style="display: flex;width: 100%;margin: 0 auto;font-weight: bold;">
+  <!-- <div style="display: flex;width: 100%;margin: 0 auto;font-weight: bold;">
     <div style="flex: 1;">商品名称</div>
     <div style="flex: 1;text-align: center;">库存</div>
     <div style="flex: 1;text-align: center;">可发库存</div>
@@ -63,14 +63,13 @@
     <div style="flex: 1;text-align: center;">{{ item[3] }}</div>
     <div style="flex: 1;text-align: center;">{{ item[4] }}</div>
     <div style="flex: 1;text-align: center;">{{ item[5] }}</div>
-  </div>
+  </div> -->
 
-  <div>
-    <EasyDataTable
-      :headers="headers"
-      :items="items"
-    />
-  </div>
+  <EasyDataTable
+    :headers="headers"
+    :items="items"
+    :rows-per-page="5"
+  />
 
   <h2 style="text-align: center;">客服数据</h2>
   <h3 style="text-align: center">1.部分店铺DSR</h3>
@@ -89,14 +88,12 @@ export default {
       orderYearData: null,
       stockData: [],
       headers: [
-        { text: "PLAYER", value: "player" },
-        { text: "TEAM", value: "team" },
-        { text: "NUMBER", value: "number" },
-        { text: "POSITION", value: "position" },
-        { text: "HEIGHT", value: "indicator.height" },
-        { text: "WEIGHT (lbs)", value: "indicator.weight", sortable: true },
-        { text: "LAST ATTENDED", value: "lastAttended", width: 200 },
-        { text: "COUNTRY", value: "country" },
+        { text: "商品名称", value: "goods_name" },
+        { text: "商家编码", value: "goods_no" },
+        { text: "品牌", value: "brand" },
+        { text: "库存", value: "total_stock" },
+        { text: "可发库存", value: "usable_stock" },
+        { text: "待发货量", value: "to_ship_stock" },
       ],
       items: [
         { player: "Stephen Curry", team: "GSW", number: 30, position: 'G', indicator: { "height": '6-2', "weight": 185 }, lastAttended: "Davidson", country: "USA" },
@@ -228,6 +225,15 @@ export default {
         const data = this.groupSupplyChainDataByBrand(res.result);
         // this.drawSupplyChainChart(data);
         this.stockData = data.slice(0, 5);
+        this.items = data.map(m => {
+          const goods_name = m[0];
+          const goods_no = m[1];
+          const brand = m[2];
+          const total_stock = m[3];
+          const usable_stock = m[4];
+          const to_ship_stock = m[5];
+          return { goods_name, goods_no, brand, total_stock, usable_stock, to_ship_stock };
+        });
       }
     });
     this.getShopDSRData().then(res => {
