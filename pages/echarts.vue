@@ -604,16 +604,18 @@ export default {
       myChart.setOption(option);
       const echart = this;
       myChart.on('legendselectchanged', function (params) {
-        console.log('params', params);
-        // State if legend is selected.
-        var isSelected = params.selected[params.name];
-        // print in the console.
-        console.log(
-          (isSelected ? 'Selected' : 'Not Selected') + 'legend' + params.name
-        );
-        // print for all legends.
-        console.log(params.selected);
-        echart.drawChannelShopSalesChart(params.name);
+        // console.log('params', params);
+        // // State if legend is selected.
+        // var isSelected = params.selected[params.name];
+        // // print in the console.
+        // console.log(
+        //   (isSelected ? 'Selected' : 'Not Selected') + 'legend' + params.name
+        // );
+        // // print for all legends.
+        // console.log(params.selected);
+        if (params.name.length < 5) {
+          echart.drawChannelShopSalesChart(params.name);
+        }
       });
     },
     drawGoodsSalesChart(data) {
