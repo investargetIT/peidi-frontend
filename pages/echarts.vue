@@ -3,7 +3,7 @@
   <h3 style="text-align: center">1.店铺总业绩展示</h3>
   <div id="chart_shop_sales" style="width: 100%;height: 360px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
-  <div id="chart_goods_sales" style="width: 100%;height: 560px;"></div>
+  <div id="chart_goods_sales" style="width: 100%;height: 360px;"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
   <!-- <van-row>
@@ -104,7 +104,6 @@ export default {
     };
   },
   mounted() {
-    // this.getShopSalesDate('天猫', '2024-01-01 00:00:00', '2024-01-31 23:59:59').then(res => console.log('res', res));
     Promise.all([
       this.getSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
       this.getSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
@@ -570,21 +569,19 @@ export default {
       const myChart = echarts.init(chartDom);
       const option = {
         title: {
-          text: '2024年渠道销售额（月度）',
+          text: '2024年渠道销售额（月）',
           left: 'center'
         },
         tooltip: {
           trigger: 'axis'
         },
         legend: {
+          type: 'scroll',
           top: 40,
           data: data.map(m => m.name)
         },
         grid: {
-          top: 120,
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
+          top: 90,
           containLabel: true
         },
         xAxis: {
@@ -595,9 +592,29 @@ export default {
         yAxis: {
           type: 'value'
         },
+        toolbox: {
+          feature: {
+            restore: {
+              show: true
+            }
+          }
+        },
         series: data.map(m => ({ name: m.name, type: 'line', data: m.data })),
       };
       myChart.setOption(option);
+      const echart = this;
+      myChart.on('legendselectchanged', function (params) {
+        console.log('params', params);
+        // State if legend is selected.
+        var isSelected = params.selected[params.name];
+        // print in the console.
+        console.log(
+          (isSelected ? 'Selected' : 'Not Selected') + 'legend' + params.name
+        );
+        // print for all legends.
+        console.log(params.selected);
+        echart.drawChannelShopSalesChart(params.name);
+      });
     },
     drawGoodsSalesChart(data) {
       const chartDom = document.getElementById('chart_goods_sales');
@@ -612,14 +629,11 @@ export default {
         },
         legend: {
           type: 'scroll',
-          orient: 'vertical',
           top: 40,
-          right: 0,
           data: data.map(m => m.name)
         },
         grid: {
-          left: 0,
-          right: 140,
+          top: 90,
           containLabel: true,
         },
         xAxis: {
@@ -734,6 +748,34 @@ export default {
         ]
       };
       myChart.setOption(option);
+    },
+    drawChannelShopSalesChart(channel_name) {
+      Promise.all([
+        this.getShopSalesDate(channel_name, '2024-01-01 00:00:00', '2024-01-31 23:59:59'),
+        this.getShopSalesDate(channel_name, '2024-02-01 00:00:00', '2024-02-29 23:59:59'),
+        this.getShopSalesDate(channel_name, '2024-03-01 00:00:00', '2024-03-31 23:59:59'),
+        this.getShopSalesDate(channel_name, '2024-04-01 00:00:00', '2024-04-30 23:59:59'),
+        this.getShopSalesDate(channel_name, '2024-05-01 00:00:00', '2024-05-31 23:59:59'),
+        this.getShopSalesDate(channel_name, '2024-06-01 00:00:00', '2024-06-30 23:59:59'),
+      ]).then(res => {
+        const channel = [];
+        const amount = [];
+        res.forEach((element, index) => {
+          const result = this.groupSalesDataByChannel(element.result);
+          result.forEach(element => {
+            const i = channel.indexOf(element.channel);
+            if (i > -1) {
+              amount[i]['data'][index] = parseInt(element.amount);
+            } else {
+              channel.push(element.channel);
+              const value = [];
+              value[index] = parseInt(element.amount);
+              amount.push({ name: element.channel, data: value });
+            }
+          });
+        });
+        this.drawShopSalesChart(amount);
+      });
     },
   },
 }
