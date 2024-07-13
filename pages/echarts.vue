@@ -570,6 +570,7 @@ export default {
       const option = {
         title: {
           text: '2024年渠道销售额（月）',
+          subtext: '点击下方👇渠道名称可查看店铺销售额\n点击右侧👉重置按钮返回渠道销售额',
           left: 'center'
         },
         tooltip: {
@@ -577,10 +578,12 @@ export default {
         },
         legend: {
           type: 'scroll',
-          top: 40,
+          top: 60,
           data: data.map(m => m.name)
         },
         grid: {
+          left: 10,
+          right: 10,
           top: 90,
           containLabel: true
         },
