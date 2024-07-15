@@ -140,6 +140,7 @@ export default {
       this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
       this.getGoodsSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
     ]).then(res => {
+      // console.log(res);
       const channel = [];
       const amount = [];
       res.forEach((element, index) => {
