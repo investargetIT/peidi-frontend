@@ -3,7 +3,7 @@
   <h3 style="text-align: center">1.店铺总业绩展示</h3>
   <div id="chart_shop_sales" style="width: 100%;height: 360px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
-  <div id="chart_goods_sales" style="width: 100%;height: 360px;"></div>
+  <div id="chart_goods_sales" style="width: 100%;height: 440px;"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
   <!-- <van-row>
