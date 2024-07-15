@@ -87,6 +87,7 @@ export default {
       orderThirtyDaysData: null,
       orderYearData: null,
       stockData: [],
+      spuEcharts: null,
       headers: [
         { text: "商品名称", value: "goods_name" },
         { text: "商家编码", value: "goods_no" },
@@ -95,16 +96,10 @@ export default {
         { text: "可发库存", value: "usable_stock" },
         { text: "待发货量", value: "to_ship_stock" },
       ],
-      items: [
-        { player: "Stephen Curry", team: "GSW", number: 30, position: 'G', indicator: { "height": '6-2', "weight": 185 }, lastAttended: "Davidson", country: "USA" },
-        { player: "Lebron James", team: "LAL", number: 6, position: 'F', indicator: { "height": '6-9', "weight": 250 }, lastAttended: "St. Vincent-St. Mary HS (OH)", country: "USA" },
-        { player: "Kevin Durant", team: "BKN", number: 7, position: 'F', indicator: { "height": '6-10', "weight": 240 }, lastAttended: "Texas-Austin", country: "USA" },
-        { player: "Giannis Antetokounmpo", team: "MIL", number: 34, position: 'F', indicator: { "height": '6-11', "weight": 242 }, lastAttended: "Filathlitikos", country: "Greece" },
-      ],
+      items: [],
     };
   },
   mounted() {
-    // this.getShopSPUSalesData('鸭肉干','2024-01-01 00:00:00', '2024-01-31 23:59:59').then(res => console.log(res));
     Promise.all([
       this.getSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
       this.getSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
@@ -640,6 +635,7 @@ export default {
     drawGoodsSalesChart(data) {
       const chartDom = document.getElementById('chart_goods_sales');
       const myChart = echarts.init(chartDom);
+      this.spuEcharts = myChart;
       const option = {
         title: {
           text: '2024年SPU销售额（月度）',
@@ -677,6 +673,12 @@ export default {
         },
         series: data.map(m => ({ name: m.name, type: 'line', data: m.data })),
       };
+      const echart = this;
+      myChart.on('legendselectchanged', function (params) {
+        if (params.name.length < 7) {
+          echart.getSPUShopSalesData(params.name);
+        }
+      });
       myChart.setOption(option);
     },
     drawSupplyChainChart(data) {
@@ -726,6 +728,42 @@ export default {
         ]
       };
       myChart.setOption(option);
+    },
+    getSPUShopSalesData(spu) {
+      this.getShopSPUSalesData(spu,'2024-01-01 00:00:00', '2024-06-30 23:59:59').then(res => {
+        let { result: data } = res;
+        data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
+        this.drawSPUShopSalesChart(data);
+      });
+    },
+    drawSPUShopSalesChart(data) {
+      const option = {
+        tooltip: {
+          trigger: 'item'
+        },
+        toolbox: {
+          feature: {
+            restore: {
+              show: true
+            }
+          }
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: '50%',
+            data,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      this.spuEcharts.setOption(option, true);
     },
     drawShipDataChart(data) {
       const chartDom = document.getElementById('chart_ship_data');
