@@ -260,7 +260,7 @@ export default {
         },
       });
     },
-    getShopSalesDate(shopName, startDate, endDate) {
+    getShopSalesData(shopName, startDate, endDate) {
       const runtimeConfig = useRuntimeConfig();
       return $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
         method: 'POST',
@@ -643,6 +643,7 @@ export default {
       const option = {
         title: {
           text: '2024年SPU销售额（月度）',
+          subtext: '点击下方👇SPU名称可查看各店铺销售额\n点击右侧👉重置按钮返回',
           left: 'center'
         },
         tooltip: {
@@ -650,10 +651,12 @@ export default {
         },
         legend: {
           type: 'scroll',
-          top: 40,
+          top: 60,
           data: data.map(m => m.name)
         },
         grid: {
+          left: 10,
+          right: 10,
           top: 90,
           containLabel: true,
         },
@@ -664,6 +667,13 @@ export default {
         },
         yAxis: {
           type: 'value'
+        },
+        toolbox: {
+          feature: {
+            restore: {
+              show: true
+            }
+          }
         },
         series: data.map(m => ({ name: m.name, type: 'line', data: m.data })),
       };
@@ -772,12 +782,12 @@ export default {
     },
     drawChannelShopSalesChart(channel_name) {
       Promise.all([
-        this.getShopSalesDate(channel_name, '2024-01-01 00:00:00', '2024-01-31 23:59:59'),
-        this.getShopSalesDate(channel_name, '2024-02-01 00:00:00', '2024-02-29 23:59:59'),
-        this.getShopSalesDate(channel_name, '2024-03-01 00:00:00', '2024-03-31 23:59:59'),
-        this.getShopSalesDate(channel_name, '2024-04-01 00:00:00', '2024-04-30 23:59:59'),
-        this.getShopSalesDate(channel_name, '2024-05-01 00:00:00', '2024-05-31 23:59:59'),
-        this.getShopSalesDate(channel_name, '2024-06-01 00:00:00', '2024-06-30 23:59:59'),
+        this.getShopSalesData(channel_name, '2024-01-01 00:00:00', '2024-01-31 23:59:59'),
+        this.getShopSalesData(channel_name, '2024-02-01 00:00:00', '2024-02-29 23:59:59'),
+        this.getShopSalesData(channel_name, '2024-03-01 00:00:00', '2024-03-31 23:59:59'),
+        this.getShopSalesData(channel_name, '2024-04-01 00:00:00', '2024-04-30 23:59:59'),
+        this.getShopSalesData(channel_name, '2024-05-01 00:00:00', '2024-05-31 23:59:59'),
+        this.getShopSalesData(channel_name, '2024-06-01 00:00:00', '2024-06-30 23:59:59'),
       ]).then(res => {
         const channel = [];
         const amount = [];
