@@ -4,6 +4,7 @@
   <div id="chart_shop_sales" style="width: 100%;height: 360px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
   <div id="chart_goods_sales" style="width: 100%;height: 440px;"></div>
+  <!-- <div id="echarts_spu_goals" style="width: 100%;height: 540px;"></div> -->
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
   <!-- <van-row>
@@ -100,6 +101,7 @@ export default {
     };
   },
   mounted() {
+    // this.drawSPUGoal();
     Promise.all([
       this.getSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
       this.getSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
@@ -771,6 +773,99 @@ export default {
       };
       this.spuEcharts.setOption(option, true);
     },
+    // drawSPUGoal() {
+    //   const chartDom = document.getElementById('echarts_spu_goals');
+    //   const myChart = echarts.init(chartDom);
+    //   const gaugeData = [
+    //     {
+    //       value: 20,
+    //       name: 'Perfect',
+    //       title: {
+    //         offsetCenter: ['0%', '-35%']
+    //       },
+    //       detail: {
+    //         valueAnimation: true,
+    //         offsetCenter: ['0%', '-20%']
+    //       }
+    //     },
+    //     {
+    //       value: 40,
+    //       name: 'Good',
+    //       title: {
+    //         offsetCenter: ['0%', '-5%']
+    //       },
+    //       detail: {
+    //         valueAnimation: true,
+    //         offsetCenter: ['0%', '10%']
+    //       }
+    //     },
+    //     {
+    //       value: 60,
+    //       name: 'Commonly',
+    //       title: {
+    //         offsetCenter: ['0%', '25%']
+    //       },
+    //       detail: {
+    //         valueAnimation: true,
+    //         offsetCenter: ['0%', '40%']
+    //       }
+    //     }
+    //   ];
+    //   const option = {
+    //     series: [
+    //       {
+    //         type: 'gauge',
+    //         startAngle: 90,
+    //         endAngle: -270,
+    //         pointer: {
+    //           show: false
+    //         },
+    //         progress: {
+    //           show: true,
+    //           overlap: false,
+    //           roundCap: true,
+    //           clip: false,
+    //           itemStyle: {
+    //             borderWidth: 1,
+    //             borderColor: '#464646'
+    //           }
+    //         },
+    //         axisLine: {
+    //           lineStyle: {
+    //             width: 40
+    //           }
+    //         },
+    //         splitLine: {
+    //           show: false,
+    //           distance: 0,
+    //           length: 10
+    //         },
+    //         axisTick: {
+    //           show: false
+    //         },
+    //         axisLabel: {
+    //           show: false,
+    //           distance: 50
+    //         },
+    //         data: gaugeData,
+    //         title: {
+    //           fontSize: 14
+    //         },
+    //         detail: {
+    //           width: 50,
+    //           height: 14,
+    //           fontSize: 14,
+    //           color: 'inherit',
+    //           borderColor: 'inherit',
+    //           borderRadius: 20,
+    //           borderWidth: 1,
+    //           formatter: '{value}%'
+    //         }
+    //       }
+    //     ]
+    //   };
+    //   myChart.setOption(option);
+    // },
     drawShipDataChart(data) {
       const chartDom = document.getElementById('chart_ship_data');
       const myChart = echarts.init(chartDom);
