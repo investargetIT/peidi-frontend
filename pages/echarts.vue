@@ -34,7 +34,7 @@
   </van-row> -->
   <div id="chart_wms_data" style="width: 100%;height: 300px;"></div>
   <h3 style="text-align: center">2.发货地图</h3>
-  <div id="myChart" style="width: 100%;height: 540px;"></div>
+  <div id="myChart" style="width: 100%;height: 600px;"></div>
   <h3 style="text-align: center">3.年度发货数量</h3>
   <div id="chart_ship_data" style="width: 100%;height: 300px;"></div>
 
