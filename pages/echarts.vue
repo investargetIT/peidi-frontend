@@ -160,7 +160,7 @@ export default {
       this.drawGoodsSalesChart(amount);
     });
 
-    this.getShipData('2024-01-01', '2024-05-31').then((res) => {
+    this.getShipData('2024-01-01', '2024-06-30').then((res) => {
       if (res.code === 1000) {
         const data = [];
         res.result.forEach(element => {
@@ -477,7 +477,7 @@ export default {
       const option = {
         backgroundColor: '#404a59',
         title: {
-          text: '2024年1-5月发货地图',
+          text: '2024年1-6月发货地图',
           top: 20,
           left: 'center',
           textStyle: {
