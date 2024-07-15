@@ -127,33 +127,7 @@ export default {
       this.drawShopSalesChart(amount);
     });
 
-    Promise.all([
-      this.getGoodsSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
-      this.getGoodsSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
-      this.getGoodsSalesData('2024-03-01 00:00:00', '2024-03-31 23:59:59'),
-      this.getGoodsSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
-      this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
-      this.getGoodsSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
-    ]).then(res => {
-      // console.log(res);
-      const channel = [];
-      const amount = [];
-      res.forEach((element, index) => {
-        const result = this.groupGoodsSalesDataBySPU(element.result);
-        result.forEach(element => {
-          const i = channel.indexOf(element.channel);
-          if (i > -1) {
-            amount[i]['data'][index] = element.amount;
-          } else {
-            channel.push(element.channel);
-            const value = [];
-            value[index] = element.amount;
-            amount.push({ name: element.channel, data: value });
-          }
-        });
-      });
-      this.drawGoodsSalesChart(amount);
-    });
+    this.getAndDrawSPUSalesData();
 
     this.getShipData('2024-01-01', '2024-06-30').then((res) => {
       if (res.code === 1000) {
@@ -253,6 +227,34 @@ export default {
           name: 'GetSalesAmountRanking',
           params: [startDate, endDate],
         },
+      });
+    },
+    getAndDrawSPUSalesData() {
+      Promise.all([
+        this.getGoodsSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
+        this.getGoodsSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
+        this.getGoodsSalesData('2024-03-01 00:00:00', '2024-03-31 23:59:59'),
+        this.getGoodsSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
+        this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
+        this.getGoodsSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
+      ]).then(res => {
+        const channel = [];
+        const amount = [];
+        res.forEach((element, index) => {
+          const result = this.groupGoodsSalesDataBySPU(element.result);
+          result.forEach(element => {
+            const i = channel.indexOf(element.channel);
+            if (i > -1) {
+              amount[i]['data'][index] = element.amount;
+            } else {
+              channel.push(element.channel);
+              const value = [];
+              value[index] = element.amount;
+              amount.push({ name: element.channel, data: value });
+            }
+          });
+        });
+        this.drawGoodsSalesChart(amount);
       });
     },
     getShopSalesData(shopName, startDate, endDate) {
@@ -639,7 +641,7 @@ export default {
       const option = {
         title: {
           text: '2024年SPU销售额（月度）',
-          subtext: '点击下方👇SPU名称可查看各店铺销售额\n点击右侧👉重置按钮返回',
+          subtext: '点击下方👇SPU名称可查看各店铺销售额',
           left: 'center'
         },
         tooltip: {
@@ -664,13 +666,6 @@ export default {
         yAxis: {
           type: 'value'
         },
-        toolbox: {
-          feature: {
-            restore: {
-              show: true
-            }
-          }
-        },
         series: data.map(m => ({ name: m.name, type: 'line', data: m.data })),
       };
       const echart = this;
@@ -679,7 +674,7 @@ export default {
           echart.getSPUShopSalesData(params.name);
         }
       });
-      myChart.setOption(option);
+      myChart.setOption(option, true);
     },
     drawSupplyChainChart(data) {
       const chartDom = document.getElementById('chart_supply_chain');
@@ -733,18 +728,29 @@ export default {
       this.getShopSPUSalesData(spu,'2024-01-01 00:00:00', '2024-06-30 23:59:59').then(res => {
         let { result: data } = res;
         data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
-        this.drawSPUShopSalesChart(data);
+        this.drawSPUShopSalesChart(data, spu);
       });
     },
-    drawSPUShopSalesChart(data) {
+    drawSPUShopSalesChart(data, spu) {
+      const echarts = this;
       const option = {
         tooltip: {
           trigger: 'item'
         },
+        title: {
+          text: `2024年1-6月${spu}各店铺销售额`,
+          subtext: '点击右侧👉重置按钮返回',
+          left: 'center',
+        },
         toolbox: {
           feature: {
-            restore: {
-              show: true
+            myFeature: {
+              show: true,
+              title: '重置',
+              icon: 'path://m3.98652376 1.07807068c-2.38377179 1.38514556-3.98652376 3.96636605-3.98652376 6.92192932 0 4.418278 3.581722 8 8 8s8-3.581722 8-8-3.581722-8-8-8',
+              onclick: function () {
+                echarts.getAndDrawSPUSalesData();
+              }
             }
           }
         },
