@@ -1,10 +1,9 @@
 <template>
   <h2 style="text-align: center;">销售数据</h2>
   <h3 style="text-align: center">1.店铺总业绩展示</h3>
-  <div id="chart_shop_sales" style="width: 100%;height: 360px;"></div>
+  <div id="chart_shop_sales" style="width: 100%;height: 400px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
-  <div id="chart_goods_sales" style="width: 100%;height: 440px;"></div>
-  <!-- <div id="echarts_spu_goals" style="width: 100%;height: 540px;"></div> -->
+  <div id="chart_goods_sales" style="width: 100%;height: 460px;"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
   <!-- <van-row>
@@ -98,10 +97,14 @@ export default {
         { text: "待发货量", value: "to_ship_stock" },
       ],
       items: [],
+      yesterdayStr: null,
     };
   },
   mounted() {
-    // this.drawSPUGoal();
+    const dateObj = new Date();
+    dateObj.setDate(dateObj.getDate() - 1);
+    const yesterdayStr = dateObj.toISOString().split('T')[0];
+    this.yesterdayStr = yesterdayStr;
     Promise.all([
       this.getSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
       this.getSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
@@ -109,6 +112,7 @@ export default {
       this.getSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
       this.getSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
       this.getSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
+      this.getSalesData('2024-07-01 00:00:00', yesterdayStr + ' 23:59:59'),
     ]).then(res => {
       const channel = [];
       const amount = [];
@@ -131,7 +135,7 @@ export default {
 
     this.getAndDrawSPUSalesData();
 
-    this.getShipData('2024-01-01', '2024-06-30').then((res) => {
+    this.getShipData('2024-01-01', yesterdayStr).then((res) => {
       if (res.code === 1000) {
         const data = [];
         res.result.forEach(element => {
@@ -232,6 +236,9 @@ export default {
       });
     },
     getAndDrawSPUSalesData() {
+      const dateObj = new Date();
+      dateObj.setDate(dateObj.getDate() - 1);
+      const yesterdayStr = dateObj.toISOString().split('T')[0];
       Promise.all([
         this.getGoodsSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
         this.getGoodsSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
@@ -239,6 +246,7 @@ export default {
         this.getGoodsSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
         this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
         this.getGoodsSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
+        this.getGoodsSalesData('2024-07-01 00:00:00', yesterdayStr + ' 23:59:59')
       ]).then(res => {
         const channel = [];
         const amount = [];
@@ -477,7 +485,8 @@ export default {
       const option = {
         backgroundColor: '#404a59',
         title: {
-          text: '2024年1-6月发货地图',
+          text: '2024年发货地图',
+          subtext: `数据截止日期${this.yesterdayStr}`,
           top: 20,
           left: 'center',
           textStyle: {
@@ -585,8 +594,8 @@ export default {
       const myChart = echarts.init(chartDom);
       const option = {
         title: {
-          text: '2024年渠道销售额（月）',
-          subtext: '点击下方👇渠道名称可查看店铺销售额\n点击右侧👉重置按钮返回渠道销售额',
+          text: '2024年渠道销售额',
+          subtext: `数据截止日期${this.yesterdayStr}\n点击下方👇渠道名称可查看店铺销售额\n点击右侧👉重置按钮返回渠道销售额`,
           left: 'center'
         },
         tooltip: {
@@ -594,19 +603,19 @@ export default {
         },
         legend: {
           type: 'scroll',
-          top: 60,
+          top: 80,
           data: data.map(m => m.name)
         },
         grid: {
           left: 10,
           right: 10,
-          top: 90,
+          top: 120,
           containLabel: true
         },
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
         },
         yAxis: {
           type: 'value'
@@ -623,7 +632,6 @@ export default {
       myChart.setOption(option);
       const echart = this;
       myChart.on('legendselectchanged', function (params) {
-        // console.log('params', params);
         // // State if legend is selected.
         // var isSelected = params.selected[params.name];
         // // print in the console.
@@ -643,8 +651,8 @@ export default {
       this.spuEcharts = myChart;
       const option = {
         title: {
-          text: '2024年SPU销售额（月度）',
-          subtext: '点击下方👇SPU名称可查看各店铺销售额',
+          text: '2024年SPU销售额',
+          subtext: `数据截止日期${this.yesterdayStr}\n点击下方👇SPU名称可查看各店铺销售额`,
           left: 'center'
         },
         tooltip: {
@@ -664,7 +672,7 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
         },
         yAxis: {
           type: 'value'
@@ -728,7 +736,10 @@ export default {
       myChart.setOption(option);
     },
     getSPUShopSalesData(spu) {
-      this.getShopSPUSalesData(spu,'2024-01-01 00:00:00', '2024-06-30 23:59:59').then(res => {
+      const dateObj = new Date();
+      dateObj.setDate(dateObj.getDate() - 1);
+      const yesterdayStr = dateObj.toISOString().split('T')[0];
+      this.getShopSPUSalesData(spu,'2024-01-01 00:00:00', yesterdayStr + ' 23:59:59').then(res => {
         let { result: data } = res;
         data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
         this.drawSPUShopSalesChart(data, spu);
@@ -741,8 +752,8 @@ export default {
           trigger: 'item'
         },
         title: {
-          text: `2024年1-6月${spu}各店铺销售额`,
-          subtext: '点击右侧👉重置按钮返回',
+          text: `2024年${spu}各店铺销售额`,
+          subtext: `数据截止日期${this.yesterdayStr}\n点击右侧👉重置按钮返回`,
           left: 'center',
         },
         toolbox: {
@@ -928,6 +939,7 @@ export default {
         this.getShopSalesData(channel_name, '2024-04-01 00:00:00', '2024-04-30 23:59:59'),
         this.getShopSalesData(channel_name, '2024-05-01 00:00:00', '2024-05-31 23:59:59'),
         this.getShopSalesData(channel_name, '2024-06-01 00:00:00', '2024-06-30 23:59:59'),
+        this.getShopSalesData(channel_name, '2024-07-01 00:00:00', this.yesterdayStr + ' 23:59:59'),
       ]).then(res => {
         const channel = [];
         const amount = [];
