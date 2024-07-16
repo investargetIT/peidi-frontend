@@ -312,6 +312,7 @@ export default {
         body: {
           name: 'GetSimplifiedStockDetails',
           params: [],
+          flush: true,
         },
       });
     },
