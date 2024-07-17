@@ -335,6 +335,7 @@ export default {
         body: {
           name: 'GetWMSOrderStats',
           params: [],
+          flush: true,
         },
       });
     },
@@ -486,7 +487,7 @@ export default {
         backgroundColor: '#404a59',
         title: {
           text: '2024年发货地图',
-          subtext: `数据截止日期${this.yesterdayStr}`,
+          subtext: `数据截止至${this.yesterdayStr}`,
           top: 20,
           left: 'center',
           textStyle: {
@@ -595,7 +596,7 @@ export default {
       const option = {
         title: {
           text: '2024年渠道销售额',
-          subtext: `数据截止日期${this.yesterdayStr}\n点击下方👇渠道名称可查看店铺销售额\n点击右侧👉重置按钮返回渠道销售额`,
+          subtext: `数据截止至${this.yesterdayStr}\n点击下方👇渠道名称可查看店铺销售额\n点击右侧👉重置按钮返回渠道销售额`,
           left: 'center'
         },
         tooltip: {
@@ -652,7 +653,7 @@ export default {
       const option = {
         title: {
           text: '2024年SPU销售额',
-          subtext: `数据截止日期${this.yesterdayStr}\n点击下方👇SPU名称可查看各店铺销售额`,
+          subtext: `数据截止至${this.yesterdayStr}\n点击下方👇SPU名称可查看各店铺销售额`,
           left: 'center'
         },
         tooltip: {
@@ -753,7 +754,7 @@ export default {
         },
         title: {
           text: `2024年${spu}各店铺销售额`,
-          subtext: `数据截止日期${this.yesterdayStr}\n点击右侧👉重置按钮返回`,
+          subtext: `数据截止至${this.yesterdayStr}\n点击右侧👉重置按钮返回`,
           left: 'center',
         },
         toolbox: {
