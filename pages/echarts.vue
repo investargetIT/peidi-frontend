@@ -4,6 +4,7 @@
   <div id="chart_shop_sales" style="width: 100%;height: 400px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
   <div id="chart_goods_sales" style="width: 100%;height: 460px;"></div>
+  <div id="echarts_spu_goals" style="width: 100%;height: 280px;"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
   <!-- <van-row>
@@ -97,12 +98,15 @@ export default {
         { text: "待发货量", value: "to_ship_stock" },
       ],
       items: [],
+      yesterday: null,
       yesterdayStr: null,
     };
   },
   mounted() {
+    this.drawSPUGoal();
     const dateObj = new Date();
     dateObj.setDate(dateObj.getDate() - 1);
+    this.yesterday = dateObj;
     const yesterdayStr = dateObj.toISOString().split('T')[0];
     this.yesterdayStr = yesterdayStr;
     Promise.all([
@@ -684,6 +688,7 @@ export default {
       myChart.on('legendselectchanged', function (params) {
         if (params.name.length < 7) {
           echart.getSPUShopSalesData(params.name);
+          echart.getSPUSalesGoalData(params.name);
         }
       });
       myChart.setOption(option, true);
@@ -746,6 +751,54 @@ export default {
         this.drawSPUShopSalesChart(data, spu);
       });
     },
+    getSPUSalesGoalData(spu) {
+      this.getGoodsSalesData('2024-01-01 00:00:00', this.yesterdayStr + ' 23:59:59').then(res => {
+        const { result: allData } = res;
+        let data = allData.filter(f => f[0] == spu);
+        if (data.length > 0) {
+          data = data[0]
+        }
+        const year = this.yesterday.getFullYear();
+        const dayOfTheYear = Math.floor((this.yesterday - new Date(year, 0, 0)) / 1000 / 60 / 60 / 24);
+        const daysInYear = ((year % 4 === 0 && year % 100 > 0) || year %400 == 0) ? 366 : 365;
+        data = [
+          {
+            value: parseInt(dayOfTheYear / daysInYear * 100),
+            name: '时间完成率',
+            title: {
+              offsetCenter: ['0%', '-35%']
+            },
+            detail: {
+              valueAnimation: true,
+              offsetCenter: ['0%', '-20%']
+            }
+          },
+          {
+            value: parseInt(data[4]),
+            name: '全年销售完成率',
+            title: {
+              offsetCenter: ['0%', '-5%']
+            },
+            detail: {
+              valueAnimation: true,
+              offsetCenter: ['0%', '10%']
+            }
+          },
+          {
+            value: parseInt(data[5]),
+            name: '挑战目标完成率',
+            title: {
+              offsetCenter: ['0%', '25%']
+            },
+            detail: {
+              valueAnimation: true,
+              offsetCenter: ['0%', '40%']
+            }
+          }
+        ];
+        this.drawSPUGoal(data);
+      });
+    },
     drawSPUShopSalesChart(data, spu) {
       const echarts = this;
       const option = {
@@ -786,99 +839,64 @@ export default {
       };
       this.spuEcharts.setOption(option, true);
     },
-    // drawSPUGoal() {
-    //   const chartDom = document.getElementById('echarts_spu_goals');
-    //   const myChart = echarts.init(chartDom);
-    //   const gaugeData = [
-    //     {
-    //       value: 20,
-    //       name: 'Perfect',
-    //       title: {
-    //         offsetCenter: ['0%', '-35%']
-    //       },
-    //       detail: {
-    //         valueAnimation: true,
-    //         offsetCenter: ['0%', '-20%']
-    //       }
-    //     },
-    //     {
-    //       value: 40,
-    //       name: 'Good',
-    //       title: {
-    //         offsetCenter: ['0%', '-5%']
-    //       },
-    //       detail: {
-    //         valueAnimation: true,
-    //         offsetCenter: ['0%', '10%']
-    //       }
-    //     },
-    //     {
-    //       value: 60,
-    //       name: 'Commonly',
-    //       title: {
-    //         offsetCenter: ['0%', '25%']
-    //       },
-    //       detail: {
-    //         valueAnimation: true,
-    //         offsetCenter: ['0%', '40%']
-    //       }
-    //     }
-    //   ];
-    //   const option = {
-    //     series: [
-    //       {
-    //         type: 'gauge',
-    //         startAngle: 90,
-    //         endAngle: -270,
-    //         pointer: {
-    //           show: false
-    //         },
-    //         progress: {
-    //           show: true,
-    //           overlap: false,
-    //           roundCap: true,
-    //           clip: false,
-    //           itemStyle: {
-    //             borderWidth: 1,
-    //             borderColor: '#464646'
-    //           }
-    //         },
-    //         axisLine: {
-    //           lineStyle: {
-    //             width: 40
-    //           }
-    //         },
-    //         splitLine: {
-    //           show: false,
-    //           distance: 0,
-    //           length: 10
-    //         },
-    //         axisTick: {
-    //           show: false
-    //         },
-    //         axisLabel: {
-    //           show: false,
-    //           distance: 50
-    //         },
-    //         data: gaugeData,
-    //         title: {
-    //           fontSize: 14
-    //         },
-    //         detail: {
-    //           width: 50,
-    //           height: 14,
-    //           fontSize: 14,
-    //           color: 'inherit',
-    //           borderColor: 'inherit',
-    //           borderRadius: 20,
-    //           borderWidth: 1,
-    //           formatter: '{value}%'
-    //         }
-    //       }
-    //     ]
-    //   };
-    //   myChart.setOption(option);
-    // },
+    drawSPUGoal(gaugeData) {
+      const chartDom = document.getElementById('echarts_spu_goals');
+      const myChart = echarts.init(chartDom);
+      const option = {
+        series: [
+          {
+            type: 'gauge',
+            startAngle: 90,
+            endAngle: -270,
+            pointer: {
+              show: false
+            },
+            progress: {
+              show: true,
+              overlap: false,
+              roundCap: true,
+              clip: false,
+              itemStyle: {
+                borderWidth: 1,
+                borderColor: '#464646'
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                width: 40
+              }
+            },
+            splitLine: {
+              show: false,
+              distance: 0,
+              length: 10
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false,
+              distance: 50
+            },
+            data: gaugeData,
+            title: {
+              fontSize: 14
+            },
+            detail: {
+              width: 50,
+              height: 14,
+              fontSize: 14,
+              color: 'inherit',
+              borderColor: 'inherit',
+              borderRadius: 20,
+              borderWidth: 1,
+              formatter: '{value}%'
+            }
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
     drawShipDataChart(data) {
       const chartDom = document.getElementById('chart_ship_data');
       const myChart = echarts.init(chartDom);
