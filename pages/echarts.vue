@@ -103,7 +103,6 @@ export default {
     };
   },
   mounted() {
-    this.drawSPUGoal();
     const dateObj = new Date();
     dateObj.setDate(dateObj.getDate() - 1);
     this.yesterday = dateObj;
@@ -766,18 +765,18 @@ export default {
             value: parseInt(dayOfTheYear / daysInYear * 100),
             name: '时间完成率',
             title: {
-              offsetCenter: ['0%', '-35%']
+              offsetCenter: ['0%', '-50%']
             },
             detail: {
               valueAnimation: true,
-              offsetCenter: ['0%', '-20%']
+              offsetCenter: ['0%', '-30%']
             }
           },
           {
             value: parseInt(data[4]),
             name: '全年销售完成率',
             title: {
-              offsetCenter: ['0%', '-5%']
+              offsetCenter: ['0%', '-10%']
             },
             detail: {
               valueAnimation: true,
@@ -788,11 +787,11 @@ export default {
             value: parseInt(data[5]),
             name: '挑战目标完成率',
             title: {
-              offsetCenter: ['0%', '25%']
+              offsetCenter: ['0%', '30%']
             },
             detail: {
               valueAnimation: true,
-              offsetCenter: ['0%', '40%']
+              offsetCenter: ['0%', '50%']
             }
           }
         ];
