@@ -626,6 +626,7 @@ export default {
         },
         tooltip: {
           trigger: 'axis',
+          triggerOn: 'click',
           order: 'valueDesc',
           className: 'echarts-tooltip',
           enterable: true,
@@ -690,6 +691,7 @@ export default {
         },
         tooltip: {
           trigger: 'axis',
+          triggerOn: 'click',
           order: 'valueDesc',
           className: 'echarts-tooltip',
           enterable: true,
@@ -1035,6 +1037,7 @@ export default {
   font-weight: bold;
 }
 .echarts-tooltip {
+  min-width: 200px;
   max-height: 250px;
   overflow: auto;
 }
