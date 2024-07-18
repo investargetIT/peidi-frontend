@@ -1,6 +1,10 @@
 <template>
   <h2 style="text-align: center;">销售数据</h2>
   <h3 style="text-align: center">1.店铺总业绩展示</h3>
+  <!-- <van-field v-model="fieldValue" is-link readonly label="显示" placeholder="全部" @click="showPicker = true" />
+  <van-popup v-model:show="showPicker" round position="bottom">
+    <van-picker :columns="columns" @cancel="showPicker = false" @confirm="onConfirm" />
+  </van-popup> -->
   <div id="chart_shop_sales" style="width: 100%;height: 400px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
   <div id="chart_goods_sales" style="width: 100%;height: 460px;"></div>
@@ -101,6 +105,19 @@ export default {
       yesterday: null,
       yesterdayStr: null,
       displaySPUGoals: false,
+      // columns: [
+      //   { text: '杭州', value: 'Hangzhou' },
+      //   { text: '宁波', value: 'Ningbo' },
+      //   { text: '温州', value: 'Wenzhou' },
+      //   { text: '绍兴', value: 'Shaoxing' },
+      //   { text: '湖州', value: 'Huzhou' },
+      // ],
+      // fieldValue: '',
+      // showPicker: false,
+      // onConfirm: ({ selectedOptions }) => {
+      //   this.showPicker = false;
+      //   this.fieldValue = selectedOptions[0].text;
+      // },
     };
   },
   mounted() {
