@@ -625,7 +625,10 @@ export default {
           left: 'center'
         },
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          order: 'valueDesc',
+          className: 'echarts-tooltip',
+          enterable: true,
         },
         legend: {
           type: 'scroll',
@@ -686,7 +689,10 @@ export default {
           left: 'center'
         },
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          order: 'valueDesc',
+          className: 'echarts-tooltip',
+          enterable: true,
         },
         legend: {
           type: 'scroll',
@@ -1015,7 +1021,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .cell {
   text-align: center;
   padding: 20px 0;
@@ -1027,5 +1033,9 @@ export default {
 .cell_value {
   font-size: 24px;
   font-weight: bold;
+}
+.echarts-tooltip {
+  max-height: 250px;
+  overflow: auto;
 }
 </style>
