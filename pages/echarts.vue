@@ -89,8 +89,8 @@ export default {
   data() {
     return {
       orderData: [],
-      orderThirtyDaysData: null,
-      orderYearData: null,
+      // orderThirtyDaysData: null,
+      // orderYearData: null,
       stockData: [],
       spuEcharts: null,
       headers: [
@@ -130,7 +130,7 @@ export default {
     this.getAndDrawChannelSalesData();
     this.getAndDrawSPUSalesData();
 
-    this.getShipData('2024-01-01', yesterdayStr).then((res) => {
+    this.getShipData(this.yesterday.getFullYear() + '-01-01 00:00:00', yesterdayStr + ' 23:59:59').then((res) => {
       if (res.code === 1000) {
         const data = [];
         res.result.forEach(element => {
@@ -150,31 +150,32 @@ export default {
       }
     });
     const date = new Date();
-    const dateStr = date.toISOString().slice(0, 10);
-    date.setDate(date.getDate() - 30);
+    date.setDate(this.yesterday.getDate() - 30);
     const startDateStr = date.toISOString().slice(0, 10);
-    this.getShipData(startDateStr, dateStr).then((res) => {
-      if (res.code === 1000) {
-        let total = 0;
-        res.result.forEach(element => {
-          total += element[1];
-        });
-        this.orderThirtyDaysData = total;
-      }
-    });
-    const year = new Date().getFullYear()
-    this.getShipData(year + '-01-01', dateStr).then((res) => {
-      if (res.code === 1000) {
-        let total = 0;
-        res.result.forEach(element => {
-          total += element[1];
-        });
-        this.orderYearData = total;
-      }
-    });
+    console.log('yesterday', this.yesterday);
+    console.log('start date str', startDateStr);
+    // this.getShipData(startDateStr, dateStr).then((res) => {
+    //   if (res.code === 1000) {
+    //     let total = 0;
+    //     res.result.forEach(element => {
+    //       total += element[1];
+    //     });
+    //     this.orderThirtyDaysData = total;
+    //   }
+    // });
+    const year = this.yesterday.getFullYear();
+    // this.getShipData(year + '-01-01', dateStr).then((res) => {
+    //   if (res.code === 1000) {
+    //     let total = 0;
+    //     res.result.forEach(element => {
+    //       total += element[1];
+    //     });
+    //     this.orderYearData = total;
+    //   }
+    // });
     Promise.all([
-      this.getShipData(startDateStr, dateStr),
-      this.getShipData(year + '-01-01', dateStr),
+      this.getShipData(startDateStr + ' 00:00:00', this.yesterdayStr + ' 23:59:59'),
+      this.getShipData(year + '-01-01 00:00:00', this.yesterdayStr + ' 23:59:59'),
     ]).then(res => {
       const value = [];
       res.forEach((element, index) => {
