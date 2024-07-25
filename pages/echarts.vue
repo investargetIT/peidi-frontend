@@ -215,6 +215,28 @@ export default {
     });
   },
   methods: {
+    getAllMomentMonths() {
+      const startDate = moment('2024-01-01');
+      const endDate = moment().subtract(1, 'days');
+      const betweenMonths = [];
+      const date = startDate.startOf('month');
+      while (date < endDate.endOf('month')) {
+        betweenMonths.push(date.clone());
+        date.add(1, 'month');
+      }
+      return betweenMonths;
+    },
+    getAllMonths() {
+      return this.getAllMomentMonths().map(m => {
+        const startDateTime = m.format('YYYY-MM-DD 00:00:00');
+        let endDateTime = m.endOf('month');
+        if (endDateTime > moment().subtract(1, 'days')) {
+          endDateTime = moment().subtract(1, 'days');
+        }
+        endDateTime = endDateTime.format('YYYY-MM-DD 23:59:59');
+        return { startDateTime, endDateTime };
+      });
+    },
     getSalesData(startDate, endDate) {
       const runtimeConfig = useRuntimeConfig();
       return $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
@@ -230,62 +252,48 @@ export default {
       });
     },
     getAndDrawChannelSalesData() {
-      Promise.all([
-        this.getSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
-        this.getSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
-        this.getSalesData('2024-03-01 00:00:00', '2024-03-31 23:59:59'),
-        this.getSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
-        this.getSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
-        this.getSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
-        this.getSalesData('2024-07-01 00:00:00', this.yesterdayStr + ' 23:59:59'),
-      ]).then(res => {
-        const channel = [];
-        const amount = [];
-        res.forEach((element, index) => {
-          const result = this.groupSalesDataByChannel(element.result);
-          result.forEach(element => {
-            const i = channel.indexOf(element.channel);
-            if (i > -1) {
-              amount[i]['data'][index] = parseInt(element.amount);
-            } else {
-              channel.push(element.channel);
-              const value = [];
-              value[index] = parseInt(element.amount);
-              amount.push({ name: element.channel, data: value });
-            }
+      Promise.all(this.getAllMonths().map(m => this.getSalesData(m.startDateTime, m.endDateTime)))
+        .then(res => {
+          const channel = [];
+          const amount = [];
+          res.forEach((element, index) => {
+            const result = this.groupSalesDataByChannel(element.result);
+            result.forEach(element => {
+              const i = channel.indexOf(element.channel);
+              if (i > -1) {
+                amount[i]['data'][index] = parseInt(element.amount);
+              } else {
+                channel.push(element.channel);
+                const value = [];
+                value[index] = parseInt(element.amount);
+                amount.push({ name: element.channel, data: value });
+              }
+            });
           });
+          this.drawShopSalesChart(amount);
         });
-        this.drawShopSalesChart(amount);
-      });
     },
     getAndDrawSPUSalesData() {
-      Promise.all([
-        this.getGoodsSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
-        this.getGoodsSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
-        this.getGoodsSalesData('2024-03-01 00:00:00', '2024-03-31 23:59:59'),
-        this.getGoodsSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
-        this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
-        this.getGoodsSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
-        this.getGoodsSalesData('2024-07-01 00:00:00', this.yesterdayStr + ' 23:59:59')
-      ]).then(res => {
-        const channel = [];
-        const amount = [];
-        res.forEach((element, index) => {
-          const result = this.groupGoodsSalesDataBySPU(element.result);
-          result.forEach(element => {
-            const i = channel.indexOf(element.channel);
-            if (i > -1) {
-              amount[i]['data'][index] = element.amount;
-            } else {
-              channel.push(element.channel);
-              const value = [];
-              value[index] = element.amount;
-              amount.push({ name: element.channel, data: value });
-            }
+      Promise.all(this.getAllMonths().map(m => this.getGoodsSalesData(m.startDateTime, m.endDateTime)))
+        .then(res => {
+          const channel = [];
+          const amount = [];
+          res.forEach((element, index) => {
+            const result = this.groupGoodsSalesDataBySPU(element.result);
+            result.forEach(element => {
+              const i = channel.indexOf(element.channel);
+              if (i > -1) {
+                amount[i]['data'][index] = element.amount;
+              } else {
+                channel.push(element.channel);
+                const value = [];
+                value[index] = element.amount;
+                amount.push({ name: element.channel, data: value });
+              }
+            });
           });
+          this.drawGoodsSalesChart(amount);
         });
-        this.drawGoodsSalesChart(amount);
-      });
     },
     getShopSalesData(shopName, startDate, endDate) {
       const runtimeConfig = useRuntimeConfig();
