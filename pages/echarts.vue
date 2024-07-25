@@ -84,6 +84,7 @@
 <script>
 import * as echarts from "echarts";
 import china from "~/assets/geo_china_full.json";
+import moment from 'moment';
 
 export default {
   data() {
@@ -124,13 +125,12 @@ export default {
     const dateObj = new Date();
     dateObj.setDate(dateObj.getDate() - 1);
     this.yesterday = dateObj;
-    const yesterdayStr = dateObj.toISOString().split('T')[0];
-    this.yesterdayStr = yesterdayStr;
+    this.yesterdayStr = moment().subtract(1, 'days').format().split('T')[0];
 
     this.getAndDrawChannelSalesData();
     this.getAndDrawSPUSalesData();
 
-    this.getShipData(this.yesterday.getFullYear() + '-01-01 00:00:00', yesterdayStr + ' 23:59:59').then((res) => {
+    this.getShipData(this.yesterday.getFullYear() + '-01-01 00:00:00', this.yesterdayStr + ' 23:59:59').then((res) => {
       if (res.code === 1000) {
         const data = [];
         res.result.forEach(element => {
@@ -152,8 +152,6 @@ export default {
     const date = new Date();
     date.setDate(this.yesterday.getDate() - 30);
     const startDateStr = date.toISOString().slice(0, 10);
-    console.log('yesterday', this.yesterday);
-    console.log('start date str', startDateStr);
     // this.getShipData(startDateStr, dateStr).then((res) => {
     //   if (res.code === 1000) {
     //     let total = 0;
@@ -261,9 +259,6 @@ export default {
       });
     },
     getAndDrawSPUSalesData() {
-      const dateObj = new Date();
-      dateObj.setDate(dateObj.getDate() - 1);
-      const yesterdayStr = dateObj.toISOString().split('T')[0];
       Promise.all([
         this.getGoodsSalesData('2024-01-01 00:00:00', '2024-01-31 23:59:59'),
         this.getGoodsSalesData('2024-02-01 00:00:00', '2024-02-29 23:59:59'),
@@ -271,7 +266,7 @@ export default {
         this.getGoodsSalesData('2024-04-01 00:00:00', '2024-04-30 23:59:59'),
         this.getGoodsSalesData('2024-05-01 00:00:00', '2024-05-31 23:59:59'),
         this.getGoodsSalesData('2024-06-01 00:00:00', '2024-06-30 23:59:59'),
-        this.getGoodsSalesData('2024-07-01 00:00:00', yesterdayStr + ' 23:59:59')
+        this.getGoodsSalesData('2024-07-01 00:00:00', this.yesterdayStr + ' 23:59:59')
       ]).then(res => {
         const channel = [];
         const amount = [];
@@ -777,10 +772,7 @@ export default {
       myChart.setOption(option);
     },
     getSPUShopSalesData(spu) {
-      const dateObj = new Date();
-      dateObj.setDate(dateObj.getDate() - 1);
-      const yesterdayStr = dateObj.toISOString().split('T')[0];
-      this.getShopSPUSalesData(spu,'2024-01-01 00:00:00', yesterdayStr + ' 23:59:59').then(res => {
+      this.getShopSPUSalesData(spu,'2024-01-01 00:00:00', this.yesterdayStr + ' 23:59:59').then(res => {
         let { result: data } = res;
         data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
         this.drawSPUShopSalesChart(data, spu);
