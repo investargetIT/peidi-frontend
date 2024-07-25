@@ -624,7 +624,7 @@ export default {
       const myChart = echarts.init(chartDom);
       const option = {
         title: {
-          text: '2024年渠道销售额',
+          text: '渠道销售额',
           subtext: `数据截止至${this.yesterdayStr}\n点击下方👇渠道名称可查看店铺销售额\n点击右侧👉重置按钮返回渠道销售额`,
           left: 'center'
         },
@@ -641,15 +641,15 @@ export default {
           data: data.map(m => m.name)
         },
         grid: {
-          left: 10,
-          right: 10,
+          left: 20,
+          right: 20,
           top: 120,
           containLabel: true
         },
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+          data: this.getAllMomentMonths().map(m => m.format('YY/MM')),
         },
         yAxis: {
           type: 'value'
@@ -689,7 +689,7 @@ export default {
       this.spuEcharts = myChart;
       const option = {
         title: {
-          text: '2024年SPU销售额',
+          text: 'SPU销售额',
           subtext: `数据截止至${this.yesterdayStr}\n点击下方👇SPU名称查看详情`,
           left: 'center'
         },
@@ -706,15 +706,15 @@ export default {
           data: data.map(m => m.name)
         },
         grid: {
-          left: 10,
-          right: 10,
+          left: 20,
+          right: 20,
           top: 90,
           containLabel: true,
         },
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+          data: this.getAllMomentMonths().map(m => m.format('YY/MM')),
         },
         yAxis: {
           type: 'value'
