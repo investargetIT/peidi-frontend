@@ -992,15 +992,9 @@ export default {
       myChart.setOption(option);
     },
     drawChannelShopSalesChart(channel_name) {
-      Promise.all([
-        this.getShopSalesData(channel_name, '2024-01-01 00:00:00', '2024-01-31 23:59:59'),
-        this.getShopSalesData(channel_name, '2024-02-01 00:00:00', '2024-02-29 23:59:59'),
-        this.getShopSalesData(channel_name, '2024-03-01 00:00:00', '2024-03-31 23:59:59'),
-        this.getShopSalesData(channel_name, '2024-04-01 00:00:00', '2024-04-30 23:59:59'),
-        this.getShopSalesData(channel_name, '2024-05-01 00:00:00', '2024-05-31 23:59:59'),
-        this.getShopSalesData(channel_name, '2024-06-01 00:00:00', '2024-06-30 23:59:59'),
-        this.getShopSalesData(channel_name, '2024-07-01 00:00:00', this.yesterdayStr + ' 23:59:59'),
-      ]).then(res => {
+      Promise.all(
+        this.getAllMonths().map(m => this.getShopSalesData(channel_name, m.startDateTime, m.endDateTime))
+      ).then(res => {
         const channel = [];
         const amount = [];
         res.forEach((element, index) => {
