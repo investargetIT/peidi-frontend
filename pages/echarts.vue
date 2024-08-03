@@ -621,7 +621,7 @@ export default {
     drawShopSalesChart(data) {
       const echart = this;
       const chartDom = document.getElementById('chart_shop_sales');
-      const myChart = echarts.init(chartDom);
+      const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
       const option = {
         title: {
           text: '渠道销售额',
@@ -685,7 +685,7 @@ export default {
     },
     drawGoodsSalesChart(data) {
       const chartDom = document.getElementById('chart_goods_sales');
-      const myChart = echarts.init(chartDom);
+      const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
       this.spuEcharts = myChart;
       const option = {
         title: {
@@ -877,7 +877,7 @@ export default {
     },
     drawSPUGoal(gaugeData, spu) {
       const chartDom = document.getElementById('echarts_spu_goals');
-      const myChart = echarts.init(chartDom);
+      const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
       const option = {
         title: {
           text: `2024年${spu}销售额目标完成百分比`,
