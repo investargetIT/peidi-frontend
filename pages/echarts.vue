@@ -683,10 +683,21 @@ export default {
         }
       });
     },
+    formatNumberWithCommas(number) {
+      if (typeof number !== "number") {
+        throw new TypeError("Input should be a valid number.");
+      }
+      // Convert the number to a string
+      let numberString = number.toString();
+      // Use regular expression to add commas as thousand separators
+      let formattedString = numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return formattedString;
+    },
     drawGoodsSalesChart(data) {
       const chartDom = document.getElementById('chart_goods_sales');
       const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
       this.spuEcharts = myChart;
+      const echart = this;
       const option = {
         title: {
           text: 'SPU销售额',
@@ -699,6 +710,22 @@ export default {
           order: 'valueDesc',
           className: 'echarts-tooltip',
           enterable: true,
+          formatter: function (params) {
+            params.sort((a, b) => {
+              if (a.value === undefined && b.value !== undefined) return 1;
+              if (a.value !== undefined && b.value === undefined) return -1;
+              if (a.value === undefined && b.value === undefined) return 0;
+              return b.value - a.value;
+            });
+            let html = `<div>${params[0].name}</div>`;
+            for (let index = 0; index < params.length; index++) {
+              const element = params[index];
+              const link = 'https://example.com';
+              const tooltipContent = '<div><a href="' + link + '" target="_blank"><div style="display: flex;justify-content: space-between;color: #666;"><div>' + element.marker + element.seriesName + '</div><div>' + (element.value ? echart.formatNumberWithCommas(element.value) : '-') + '</div></div></a></div>';
+              html += tooltipContent;
+            }
+            return html;
+          },
         },
         legend: {
           type: 'scroll',
@@ -721,7 +748,7 @@ export default {
         },
         series: data.map(m => ({ name: m.name, type: 'line', data: m.data })),
       };
-      const echart = this;
+
       myChart.on('legendselectchanged', function (params) {
         if (params.name.length < 7) {
           echart.getSPUShopSalesData(params.name);
