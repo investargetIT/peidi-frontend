@@ -7,7 +7,7 @@
   </van-popup> -->
   <div id="chart_shop_sales" style="width: 100%;height: 400px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
-  <div id="chart_goods_sales" style="width: 100%;height: 460px;"></div>
+  <div id="chart_goods_sales" style="width: 100%;height: 500px;"></div>
   <div id="echarts_spu_goals" style="margin-top: 20px;width: 100%;height: 400px;" v-if="displaySPUGoals"></div>
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
@@ -729,13 +729,13 @@ export default {
         },
         legend: {
           type: 'scroll',
-          top: 60,
+          top: 70,
           data: data.map(m => m.name)
         },
         grid: {
           left: 20,
           right: 20,
-          top: 90,
+          top: 110,
           containLabel: true,
         },
         xAxis: {
