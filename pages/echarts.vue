@@ -217,6 +217,7 @@ export default {
   updated() {
     const route = useRoute();
     console.log('route', route.hash);
+    // this.getSPUShopSalesData(params.name);
   },
   methods: {
     getAllMomentMonths() {
@@ -646,14 +647,14 @@ export default {
         },
         grid: {
           left: 20,
-          right: 20,
+          right: 30,
           top: 120,
           containLabel: true
         },
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: this.getAllMomentMonths().map(m => m.format('YY/MM')),
+          data: this.getAllMomentMonths().map(m => m.format('YYYY-MM')),
         },
         yAxis: {
           type: 'value'
@@ -724,8 +725,8 @@ export default {
             let html = `<div>${params[0].name}</div>`;
             for (let index = 0; index < params.length; index++) {
               const element = params[index];
-              const link = `#${params[0].name}-${element.seriesName}`;
-              const tooltipContent = '<div><a href="' + link + '"><div style="display: flex;justify-content: space-between;color: #666;"><div>' + element.marker + element.seriesName + '</div><div>' + (element.value ? echart.formatNumberWithCommas(element.value) : '-') + '</div></div></a></div>';
+              const link = `#${params[0].name}/${element.seriesName}`;
+              const tooltipContent = '<div><a href="' + link + '"><div style="display: flex;justify-content: space-between;"><div>' + element.marker + element.seriesName + '</div><div>' + (element.value ? echart.formatNumberWithCommas(element.value) : '-') + '</div></div></a></div>';
               html += tooltipContent;
             }
             return html;
@@ -738,14 +739,14 @@ export default {
         },
         grid: {
           left: 20,
-          right: 20,
+          right: 30,
           top: 110,
           containLabel: true,
         },
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: this.getAllMomentMonths().map(m => m.format('YY/MM')),
+          data: this.getAllMomentMonths().map(m => m.format('YYYY-MM')),
         },
         yAxis: {
           type: 'value'

@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   pages: true,
   modules: ['@vant/nuxt'],
   devtools: { enabled: true },
+
   runtimeConfig: {
     public: {
       APP_ID: process.env.APP_ID,
@@ -16,4 +17,6 @@ export default defineNuxtConfig({
       DJANGO_API_TOKEN: process.env.DJANGO_API_TOKEN,
     },
   },
+
+  compatibilityDate: '2024-08-25',
 })
