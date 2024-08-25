@@ -1,75 +1,21 @@
 <template>
   <h2 style="text-align: center;">销售数据</h2>
   <h3 style="text-align: center">1.店铺总业绩展示</h3>
-  <!-- <van-field v-model="fieldValue" is-link readonly label="显示" placeholder="全部" @click="showPicker = true" />
-  <van-popup v-model:show="showPicker" round position="bottom">
-    <van-picker :columns="columns" @cancel="showPicker = false" @confirm="onConfirm" />
-  </van-popup> -->
   <div id="chart_shop_sales" style="width: 100%;height: 400px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
   <div id="chart_goods_sales" style="width: 100%;height: 500px;"></div>
   <div id="echarts_spu_goals" style="margin-top: 20px;width: 100%;height: 400px;" v-if="displaySPUGoals"></div>
+
   <h2 style="text-align: center;">订单数据</h2>
   <h3 style="text-align: center">1.发货数据</h3>
-  <!-- <van-row>
-    <van-col span="24" class="cell">
-      <div class="cell_label">今日总单量</div>
-      <div class="cell_value">{{ orderData && orderData[0] }}</div>
-    </van-col>
-  </van-row>
-  <van-row>
-    <van-col span="12" class="cell">
-      <div class="cell_label">订单待打印</div>
-      <div class="cell_value">{{ orderData && orderData[1] }}</div>
-    </van-col>
-    <van-col span="12" class="cell">
-      <div class="cell_label">今日已打印</div>
-      <div class="cell_value">{{ orderData && orderData[2] }}</div>
-    </van-col>
-  </van-row>
-  <van-row>
-    <van-col span="12" class="cell">
-      <div class="cell_label">实时订单待发货</div>
-      <div class="cell_value">{{ orderData && orderData[3] }}</div>
-    </van-col>
-    <van-col span="12" class="cell">
-      <div class="cell_label">实时今日已发货</div>
-      <div class="cell_value">{{ orderData && orderData[4] }}</div>
-    </van-col>
-  </van-row> -->
   <div id="chart_wms_data" style="width: 100%;height: 300px;"></div>
   <h3 style="text-align: center">2.发货地图</h3>
   <div id="myChart" style="width: 100%;height: 600px;"></div>
   <h3 style="text-align: center">3.年度发货数量</h3>
   <div id="chart_ship_data" style="width: 100%;height: 300px;"></div>
 
-  <!-- <van-row>
-    <van-col span="12" class="cell">
-      <div class="cell_label">近30天累计发货数量</div>
-      <div class="cell_value">{{ orderThirtyDaysData }}</div>
-    </van-col>
-    <van-col span="12" class="cell">
-      <div class="cell_label">年度累计发货数量</div>
-      <div class="cell_value">{{ orderYearData }}</div>
-    </van-col>
-  </van-row> -->
   <h2 style="text-align: center;">供应链数据</h2>
   <h3 style="text-align: center">1.商品库存</h3>
-  <!-- <div id="chart_supply_chain" style="width: 100%;height: 300px;"></div> -->
-  <!-- <div style="display: flex;width: 100%;margin: 0 auto;font-weight: bold;">
-    <div style="flex: 1;">商品名称</div>
-    <div style="flex: 1;text-align: center;">库存</div>
-    <div style="flex: 1;text-align: center;">可发库存</div>
-    <div style="flex: 1;text-align: center;">待发货量</div>
-  </div>
-
-  <div v-for="item in stockData" style="display: flex;align-items:center;width: 100%;margin: 10px auto;font-size: 14px;">
-    <div style="flex: 1;">{{ item[0] }}</div>
-    <div style="flex: 1;text-align: center;">{{ item[3] }}</div>
-    <div style="flex: 1;text-align: center;">{{ item[4] }}</div>
-    <div style="flex: 1;text-align: center;">{{ item[5] }}</div>
-  </div> -->
-
   <EasyDataTable
     :headers="headers"
     :items="items"
@@ -217,7 +163,10 @@ export default {
   updated() {
     const route = useRoute();
     console.log('route', route.hash);
-    // this.getSPUShopSalesData(params.name);
+    if (!route.hash) return;
+    const [date, spu] = route.hash.slice(1).split('/');
+    console.log(date, spu);
+    this.getSPUShopSalesData(spu);
   },
   methods: {
     getAllMomentMonths() {
@@ -867,7 +816,7 @@ export default {
       });
     },
     drawSPUShopSalesChart(data, spu) {
-      const echarts = this;
+      const vue = this;
       const option = {
         tooltip: {
           trigger: 'item'
@@ -884,8 +833,9 @@ export default {
               title: '重置',
               icon: 'path://M16.68,22.2c-1.78,2.21-3.43,4.55-5.06,7.46C5.63,40.31,3.1,52.39,4.13,64.2c1.01,11.54,5.43,22.83,13.37,32.27 c2.85,3.39,5.91,6.38,9.13,8.97c11.11,8.93,24.28,13.34,37.41,13.22c13.13-0.13,26.21-4.78,37.14-13.98 c3.19-2.68,6.18-5.73,8.91-9.13c6.4-7.96,10.51-17.29,12.07-27.14c1.53-9.67,0.59-19.83-3.07-29.66 c-3.49-9.35-8.82-17.68-15.78-24.21C96.7,8.33,88.59,3.76,79.2,1.48c-2.94-0.71-5.94-1.18-8.99-1.37c-3.06-0.2-6.19-0.13-9.4,0.22 c-2.01,0.22-3.46,2.03-3.24,4.04c0.22,2.01,2.03,3.46,4.04,3.24c2.78-0.31,5.49-0.37,8.14-0.2c2.65,0.17,5.23,0.57,7.73,1.17 c8.11,1.96,15.1,5.91,20.84,11.29c6.14,5.75,10.85,13.12,13.94,21.43c3.21,8.61,4.04,17.51,2.7,25.96 C113.59,75.85,110,84,104.4,90.96c-2.47,3.07-5.12,5.78-7.91,8.13c-9.59,8.07-21.03,12.15-32.5,12.26 c-11.47,0.11-23-3.76-32.76-11.61c-2.9-2.33-5.62-4.98-8.13-7.97c-6.92-8.22-10.77-18.09-11.66-28.2 c-0.91-10.37,1.32-20.99,6.57-30.33c1.59-2.82,3.21-5.07,5.01-7.24l0.53,14.7c0.07,2.02,1.76,3.6,3.78,3.52 c2.02-0.07,3.6-1.76,3.52-3.78l-0.85-23.42c-0.07-2.02-1.76-3.6-3.78-3.52c-0.13,0-0.25,0.02-0.37,0.03l0,0l-22.7,3.19 c-2,0.28-3.4,2.12-3.12,4.13c0.28,2,2.12,3.4,4.13,3.12L16.68,22.2L16.68,22.2z',
               onclick: function () {
-                echarts.displaySPUGoals = false;
-                echarts.getAndDrawSPUSalesData();
+                vue.displaySPUGoals = false;
+                vue.getAndDrawSPUSalesData();
+                vue.$router.push(vue.$route.path.split('#'));
               }
             }
           }
