@@ -183,11 +183,12 @@ export default {
       }
     },
     getLastDay(dateStr) {
-      // 解析日期字符串，格式为 YYYY-MM
       const [year, month] = dateStr.split('-').map(Number);
-      console.log(year, month);
-      // 获取给定月份的最后一天
-      const nextMonth = new Date(year, month, 0); // 当天设置为0时，会获得前一个月的最后一天
+      const currentMonth = moment().format('YYYY-MM');
+      if (currentMonth == dateStr) {
+        return this.yesterdayStr;
+      }
+      const nextMonth = new Date(year, month, 0);
       const momentMonth = moment(nextMonth);
       return momentMonth.format('YYYY-MM-DD');
     },
@@ -788,7 +789,7 @@ export default {
       this.getShopSPUSalesData(spu, start, end).then(res => {
         let { result: data } = res;
         data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
-        this.drawSPUShopSalesChart(data, spu, start.slice(0, 8));
+        this.drawSPUShopSalesChart(data, spu, start.slice(0, 10), end.slice(0, 10));
       });
     },
     getSPUSalesGoalData(spu) {
@@ -839,7 +840,7 @@ export default {
         this.drawSPUGoal(data, spu);
       });
     },
-    drawSPUShopSalesChart(data, spu, date) {
+    drawSPUShopSalesChart(data, spu, startDate, endDate) {
       const chartDom = document.getElementById('echarts_goods_pie');
       const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
       this.echartsGoodsPie = myChart;
@@ -849,8 +850,8 @@ export default {
           trigger: 'item'
         },
         title: {
-          text: `${date}${spu}各店铺销售额`,
-          subtext: `数据截止至${this.yesterdayStr}\n点击右侧👉重置按钮返回`,
+          text: `${startDate}至${endDate}${spu}各店铺销售额`,
+          subtext: `点击右侧👉重置按钮返回`,
           left: 'center',
         },
         toolbox: {
