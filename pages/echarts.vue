@@ -4,7 +4,8 @@
   <div id="chart_shop_sales" style="width: 100%;height: 400px;"></div>
   <h3 style="text-align: center">2.商品业绩表</h3>
   <div id="chart_goods_sales" style="width: 100%;height: 500px;" v-if="displayEchartsGoodsLine"></div>
-  <div id="echarts_goods_pie" style="width: 100%;height: 800px;" v-if="displayEchartsGoodsPie"></div>
+  <div id="echarts_goods_pie" style="width: 100%;height: 500px;" v-if="displayEchartsGoodsPie"></div>
+  <div id="echarts_goods_bar" style="width: 100%;height: 800px;" v-if="displayEchartsGoodsBar"></div>
   <div id="echarts_spu_goals" style="margin-top: 20px;width: 100%;height: 400px;" v-if="displaySPUGoals"></div>
 
   <h2 style="text-align: center;">订单数据</h2>
@@ -42,6 +43,7 @@ export default {
       stockData: [],
       spuEcharts: null,
       echartsGoodsPie: null,
+      echartsGoodsBar: null,
       headers: [
         { text: "商品名称", value: "goods_name" },
         { text: "商家编码", value: "goods_no" },
@@ -55,6 +57,7 @@ export default {
       yesterdayStr: null,
       displaySPUGoals: false,
       displayEchartsGoodsPie: false,
+      displayEchartsGoodsBar: false,
       displayEchartsGoodsLine: true,
       // columns: [
       //   { text: '杭州', value: 'Hangzhou' },
@@ -179,6 +182,7 @@ export default {
         console.log(spu);
         this.displayEchartsGoodsLine = false;
         this.displayEchartsGoodsPie = true;
+        this.displayEchartsGoodsBar = true;
         this.getSPUShopSalesData(spu, date + '-01 00:00:00', this.getLastDay(date) + ' 23:59:59');
       }
     },
@@ -730,6 +734,7 @@ export default {
         if (params.name.length < 7) {
           echart.displayEchartsGoodsLine = false;
           echart.displayEchartsGoodsPie = true;
+          echart.displayEchartsGoodsBar = true;
           echart.getSPUShopSalesData(params.name, '2024-01-01 00:00:00', echart.yesterdayStr + ' 23:59:59');
           echart.displaySPUGoals = true;
           echart.getSPUSalesGoalData(params.name);
@@ -786,10 +791,12 @@ export default {
       myChart.setOption(option);
     },
     getSPUShopSalesData(spu, start, end) {
+      console.log('getSPUShopSalesData', spu, start, end);
       this.getShopSPUSalesData(spu, start, end).then(res => {
         let { result: data } = res;
         data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
-        this.drawSPUShopSalesChart(data, spu, start.slice(0, 10), end.slice(0, 10));
+        // this.drawSPUShopSalesChart(data, spu, start.slice(0, 10), end.slice(0, 10));
+        this.drawSPUShopSalesBarChart(data, spu, start.slice(0, 10), end.slice(0, 10));
       });
     },
     getSPUSalesGoalData(spu) {
@@ -864,6 +871,7 @@ export default {
                 nuxt.$router.push('#');
                 nuxt.displayEchartsGoodsLine = true;
                 nuxt.displayEchartsGoodsPie = false;
+                nuxt.displayEchartsGoodsBar = false;
                 nuxt.displaySPUGoals = false;
                 nuxt.getAndDrawSPUSalesData();
               }
@@ -885,8 +893,16 @@ export default {
           }
         ]
       };
+      this.echartsGoodsPie.setOption(option, true);
+    },
+    drawSPUShopSalesBarChart(data, spu, startDate, endDate) {
+      console.log('drawSPUShopSalesBarChart', data, spu, startDate, endDate);
+      const chartDom = document.getElementById('echarts_goods_bar');
+      const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
+      this.echartsGoodsBar = myChart;
+      const nuxt = this;
       data.sort((a, b) => a.value - b.value);
-      option = {
+      const option = {
         tooltip: {
           trigger: 'item'
         },
@@ -905,6 +921,7 @@ export default {
                 nuxt.$router.push('#');
                 nuxt.displayEchartsGoodsLine = true;
                 nuxt.displayEchartsGoodsPie = false;
+                nuxt.displayEchartsGoodsBar = false;
                 nuxt.displaySPUGoals = false;
                 nuxt.getAndDrawSPUSalesData();
               }
@@ -934,7 +951,7 @@ export default {
           }
         ],
       };
-      this.echartsGoodsPie.setOption(option, true);
+      this.echartsGoodsBar.setOption(option, true);
     },
     drawSPUGoal(gaugeData, spu) {
       const chartDom = document.getElementById('echarts_spu_goals');
