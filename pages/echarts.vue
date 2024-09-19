@@ -210,6 +210,21 @@ export default {
       }
       return betweenMonths;
     },
+    getDatesInRange(startDate, endDate) {
+      let start = moment(startDate);
+      let end = moment(endDate);
+      let dates = [];
+
+      // 包含开始日期和结束日期
+      if (start.isSameOrBefore(end)) {
+        while (start.isSameOrBefore(end)) {
+          dates.push(start.format('YYYY-MM-DD'));
+          start.add(1, 'days');
+        }
+      }
+
+      return dates;
+    },
     getAllMonths() {
       return this.getAllMomentMonths().map(m => {
         const startDateTime = m.format('YYYY-MM-DD 00:00:00');
@@ -306,6 +321,28 @@ export default {
           params: [spu, startDate, endDate],
         },
       });
+    },
+    async getSPUDailySalesData(spu, startDate, endDate) {
+      const runtimeConfig = useRuntimeConfig();
+      const allDates = this.getDatesInRange(startDate, endDate);
+      let res = await Promise.all(allDates.map(m => (
+        $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
+          },
+          body: {
+            name: 'CalculateShopBySPU',
+            params: [spu, m + ' 00:00:00', m + ' 23:59:59'],
+          },
+        })
+      )));
+      res = res.map(m => {
+        const value = m.result.reduce((r, v) => r + v[1], 0);
+        return value;
+      });
+      return { categoryData: allDates, valueData: res };
     },
     getGoodsSalesData(startDate, endDate) {
       const runtimeConfig = useRuntimeConfig();
@@ -740,7 +777,7 @@ export default {
           echart.displayEchartsGoodsBar = false;
           echart.displayEchartsGoodsBarDaily = true;
           // echart.getSPUShopSalesData(params.name, '2024-01-01 00:00:00', echart.yesterdayStr + ' 23:59:59');
-          echart.getSPUShopSalesDailyData(params.name, '2024-01-01 00:00:00', echart.yesterdayStr + ' 23:59:59');
+          echart.getSPUShopSalesDailyData(params.name, '2024-01-01', echart.yesterdayStr);
           echart.displaySPUGoals = true;
           echart.getSPUSalesGoalData(params.name);
         }
@@ -805,14 +842,8 @@ export default {
       });
     },
     getSPUShopSalesDailyData(spu, start, end) {
-      console.log('getSPUShopSalesDailyData', spu, start, end);
-      this.getShopSPUSalesData(spu, start, end).then(res => {
-        let { result: data } = res;
-        console.log(data)
-        data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
-        // this.drawSPUShopSalesChart(data, spu, start.slice(0, 10), end.slice(0, 10));
-        // this.drawSPUShopSalesBarChart(data, spu, start.slice(0, 10), end.slice(0, 10));
-        this.drawSPUDailySalesBarChart(data, spu, start.slice(0, 10), end.slice(0, 10));
+      this.getSPUDailySalesData(spu, start, end).then(res => {
+        this.drawSPUDailySalesBarChart(res, spu, start.slice(0, 10), end.slice(0, 10));
       });
     },
     getSPUSalesGoalData(spu) {
@@ -997,18 +1028,16 @@ export default {
         valueData: valueData
       };
     },
-    drawSPUDailySalesBarChart(data1, spu, startDate, endDate) {
-      console.log('drawSPUDailySalesBarChart', data1, spu, startDate, endDate);
+    drawSPUDailySalesBarChart(data, spu, startDate, endDate) {
       const chartDom = document.getElementById('echarts_goods_bar_daily');
       const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
-      const dataCount = 5e5;
-      const data= this.generateData(dataCount);
       console.log('data1', data);
       const nuxt = this;
       const option = {
         title: {
-          text: echarts.format.addCommas(dataCount) + ' Data',
-          left: 10
+          text: `${spu}日销售额`,
+          subtext: `${startDate}至${endDate}\n点击右侧👉重置按钮返回`,
+          left: 'center',
         },
         toolbox: {
           feature: {
