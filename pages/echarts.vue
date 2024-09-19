@@ -186,7 +186,8 @@ export default {
         this.displayEchartsGoodsPie = false;
         this.displayEchartsGoodsBar = false;
         this.displayEchartsGoodsBarDaily = true;
-        this.getSPUShopSalesData(spu, date + '-01 00:00:00', this.getLastDay(date) + ' 23:59:59');
+        // this.getSPUShopSalesData(spu, date + '-01 00:00:00', this.getLastDay(date) + ' 23:59:59');
+        this.getSPUShopSalesDailyData(spu, date + '-01', this.getLastDay(date));
       }
     },
     getLastDay(dateStr) {
