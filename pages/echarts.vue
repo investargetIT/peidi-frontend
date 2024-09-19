@@ -340,7 +340,8 @@ export default {
         })
       )));
       res = res.map(m => {
-        const value = m.result.reduce((r, v) => r + v[1], 0);
+        let value = m.result.reduce((r, v) => r + v[1], 0);
+        value = parseInt(value);
         return value;
       });
       return { categoryData: allDates, valueData: res };
