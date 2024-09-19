@@ -1064,7 +1064,10 @@ export default {
           }
         },
         grid: {
-          bottom: 90
+          top: 80,
+          left: 10,
+          right: 80,
+          containLabel: true
         },
         dataZoom: [
           {
