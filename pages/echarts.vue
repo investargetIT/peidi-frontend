@@ -6,6 +6,7 @@
   <div id="chart_goods_sales" style="width: 100%;height: 500px;" v-if="displayEchartsGoodsLine"></div>
   <div id="echarts_goods_pie" style="width: 100%;height: 500px;" v-if="displayEchartsGoodsPie"></div>
   <div id="echarts_goods_bar" style="width: 100%;height: 800px;" v-if="displayEchartsGoodsBar"></div>
+  <div id="echarts_goods_bar_daily" style="width: 100%;height: 500px;" v-if="displayEchartsGoodsBarDaily"></div>
   <div id="echarts_spu_goals" style="margin-top: 20px;width: 100%;height: 400px;" v-if="displaySPUGoals"></div>
 
   <h2 style="text-align: center;">订单数据</h2>
@@ -58,6 +59,7 @@ export default {
       displaySPUGoals: false,
       displayEchartsGoodsPie: false,
       displayEchartsGoodsBar: false,
+      displayEchartsGoodsBarDaily: false,
       displayEchartsGoodsLine: true,
       // columns: [
       //   { text: '杭州', value: 'Hangzhou' },
@@ -181,8 +183,9 @@ export default {
         spu = decodeURIComponent(spu);
         console.log(spu);
         this.displayEchartsGoodsLine = false;
-        this.displayEchartsGoodsPie = true;
-        this.displayEchartsGoodsBar = true;
+        this.displayEchartsGoodsPie = false;
+        this.displayEchartsGoodsBar = false;
+        this.displayEchartsGoodsBarDaily = true;
         this.getSPUShopSalesData(spu, date + '-01 00:00:00', this.getLastDay(date) + ' 23:59:59');
       }
     },
@@ -733,9 +736,11 @@ export default {
       myChart.on('legendselectchanged', function (params) {
         if (params.name.length < 7) {
           echart.displayEchartsGoodsLine = false;
-          echart.displayEchartsGoodsPie = true;
-          echart.displayEchartsGoodsBar = true;
-          echart.getSPUShopSalesData(params.name, '2024-01-01 00:00:00', echart.yesterdayStr + ' 23:59:59');
+          echart.displayEchartsGoodsPie = false;
+          echart.displayEchartsGoodsBar = false;
+          echart.displayEchartsGoodsBarDaily = true;
+          // echart.getSPUShopSalesData(params.name, '2024-01-01 00:00:00', echart.yesterdayStr + ' 23:59:59');
+          echart.getSPUShopSalesDailyData(params.name, '2024-01-01 00:00:00', echart.yesterdayStr + ' 23:59:59');
           echart.displaySPUGoals = true;
           echart.getSPUSalesGoalData(params.name);
         }
@@ -797,6 +802,17 @@ export default {
         data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
         // this.drawSPUShopSalesChart(data, spu, start.slice(0, 10), end.slice(0, 10));
         this.drawSPUShopSalesBarChart(data, spu, start.slice(0, 10), end.slice(0, 10));
+      });
+    },
+    getSPUShopSalesDailyData(spu, start, end) {
+      console.log('getSPUShopSalesDailyData', spu, start, end);
+      this.getShopSPUSalesData(spu, start, end).then(res => {
+        let { result: data } = res;
+        console.log(data)
+        data = data.map(m => ({ name: m[0], value: parseInt(m[1]) }));
+        // this.drawSPUShopSalesChart(data, spu, start.slice(0, 10), end.slice(0, 10));
+        // this.drawSPUShopSalesBarChart(data, spu, start.slice(0, 10), end.slice(0, 10));
+        this.drawSPUDailySalesBarChart(data, spu, start.slice(0, 10), end.slice(0, 10));
       });
     },
     getSPUSalesGoalData(spu) {
@@ -872,6 +888,7 @@ export default {
                 nuxt.displayEchartsGoodsLine = true;
                 nuxt.displayEchartsGoodsPie = false;
                 nuxt.displayEchartsGoodsBar = false;
+                nuxt.displayEchartsGoodsBarDaily = false;
                 nuxt.displaySPUGoals = false;
                 nuxt.getAndDrawSPUSalesData();
               }
@@ -922,6 +939,7 @@ export default {
                 nuxt.displayEchartsGoodsLine = true;
                 nuxt.displayEchartsGoodsPie = false;
                 nuxt.displayEchartsGoodsBar = false;
+                nuxt.displayEchartsGoodsBarDaily = false;
                 nuxt.displaySPUGoals = false;
                 nuxt.getAndDrawSPUSalesData();
               }
@@ -952,6 +970,97 @@ export default {
         ],
       };
       this.echartsGoodsBar.setOption(option, true);
+    },
+    generateData(count) {
+      let baseValue = Math.random() * 1000;
+      let time = +new Date(2011, 0, 1);
+      let smallBaseValue;
+      function next(idx) {
+        smallBaseValue =
+          idx % 30 === 0
+            ? Math.random() * 700
+            : smallBaseValue + Math.random() * 500 - 250;
+        baseValue += Math.random() * 20 - 10;
+        return Math.max(0, Math.round(baseValue + smallBaseValue) + 3000);
+      }
+      const categoryData = [];
+      const valueData = [];
+      for (let i = 0; i < count; i++) {
+        categoryData.push(
+          echarts.format.formatTime('yyyy-MM-dd\nhh:mm:ss', time, false)
+        );
+        valueData.push(next(i).toFixed(2));
+        time += 1000;
+      }
+      return {
+        categoryData: categoryData,
+        valueData: valueData
+      };
+    },
+    drawSPUDailySalesBarChart(data1, spu, startDate, endDate) {
+      console.log('drawSPUDailySalesBarChart', data1, spu, startDate, endDate);
+      const chartDom = document.getElementById('echarts_goods_bar_daily');
+      const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
+      const dataCount = 5e5;
+      const data= this.generateData(dataCount);
+      console.log('data1', data);
+      const option = {
+        title: {
+          text: echarts.format.addCommas(dataCount) + ' Data',
+          left: 10
+        },
+        toolbox: {
+          feature: {
+            dataZoom: {
+              yAxisIndex: false
+            },
+            saveAsImage: {
+              pixelRatio: 2
+            }
+          }
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          bottom: 90
+        },
+        dataZoom: [
+          {
+            type: 'inside'
+          },
+          {
+            type: 'slider'
+          }
+        ],
+        xAxis: {
+          data: data.categoryData,
+          silent: false,
+          splitLine: {
+            show: false
+          },
+          splitArea: {
+            show: false
+          }
+        },
+        yAxis: {
+          splitArea: {
+            show: false
+          }
+        },
+        series: [
+          {
+            type: 'bar',
+            data: data.valueData,
+            // Set `large` for large data amount
+            large: true
+          }
+        ]
+      };
+      myChart.setOption(option, true);
     },
     drawSPUGoal(gaugeData, spu) {
       const chartDom = document.getElementById('echarts_spu_goals');
