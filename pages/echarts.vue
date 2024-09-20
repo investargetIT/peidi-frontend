@@ -1031,12 +1031,12 @@ export default {
     drawSPUDailySalesBarChart(data, spu, startDate, endDate) {
       const chartDom = document.getElementById('echarts_goods_bar_daily');
       const myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
-      console.log('data1', data);
+      const total = data.valueData.reduce((a, b) => a + b, 0);
       const nuxt = this;
       const option = {
         title: {
           text: `${spu}日销售额`,
-          subtext: `${startDate}至${endDate}\n点击右侧👉重置按钮返回`,
+          subtext: `${startDate}至${endDate}，总计：${total && total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\n点击右侧👉重置按钮返回`,
           left: 'center',
         },
         toolbox: {
