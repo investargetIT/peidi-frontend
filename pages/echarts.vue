@@ -1112,6 +1112,30 @@ export default {
         nuxt.displayEchartsGoodsBarDaily = false;
         nuxt.getSPUShopSalesData(spu, params.name + ' 00:00:00', params.name + ' 23:59:59');
       });
+
+      // 监听 dataZoom 事件
+      let debounceTimeout;
+      myChart.on('dataZoom', function (params) {
+        console.log('dataZoom event triggered:', params);
+        // 清除原来的定时器
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+          const currentOption = myChart.getOption();
+          console.log('Current dataZoom range:', currentOption.dataZoom[0]);
+          const { startValue: start, endValue: end } = currentOption.dataZoom[0];
+          const originalDate = moment(startDate, 'YYYY-MM-DD');
+          const newStartDate = originalDate.add(start, 'days').format('YYYY-MM-DD');
+          const newEndDate = originalDate.add(end, 'days').format('YYYY-MM-DD');
+          console.log('New start date:', newStartDate);
+          console.log('New end date:', newEndDate);
+          option.title = {
+            text: `${spu}日销售额`,
+            subtext: `${newStartDate}至${newEndDate}，总计：${total && total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\n点击右侧👉重置按钮返回`,
+            left: 'center',
+          };
+          myChart.setOption(option);
+        }, 1000);
+      });
     },
     drawSPUGoal(gaugeData, spu) {
       const chartDom = document.getElementById('echarts_spu_goals');
