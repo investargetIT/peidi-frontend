@@ -1124,13 +1124,14 @@ export default {
           console.log('Current dataZoom range:', currentOption.dataZoom[0]);
           const { startValue: start, endValue: end } = currentOption.dataZoom[0];
           const originalDate = moment(startDate, 'YYYY-MM-DD');
-          const newStartDate = originalDate.add(start, 'days').format('YYYY-MM-DD');
-          const newEndDate = originalDate.add(end, 'days').format('YYYY-MM-DD');
+          const newStartDate = originalDate.clone().add(start, 'days').format('YYYY-MM-DD');
+          const newEndDate = originalDate.clone().add(end, 'days').format('YYYY-MM-DD');
           console.log('New start date:', newStartDate);
           console.log('New end date:', newEndDate);
+          const totalValue = data.valueData.slice(start, end + 1).reduce((a, b) => a + b, 0);
           option.title = {
             text: `${spu}日销售额`,
-            subtext: `${newStartDate}至${newEndDate}，总计：${total && total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\n点击右侧👉重置按钮返回`,
+            subtext: `${newStartDate}至${newEndDate}，总计：${totalValue && totalValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\n点击右侧👉重置按钮返回`,
             left: 'center',
           };
           myChart.setOption(option);
