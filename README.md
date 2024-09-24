@@ -14,7 +14,10 @@
 ```
 docker exec peidi-frontend npm run generate
 ```
-
+4. 发布到服务器
+```
+scp -r .output/public/* root@IP_ADDRESS:/media/www/planet
+```
 # 钉钉免登 APITable
 路由`/peidi/dd`实现了钉钉免登，访问该页面会获取当前钉钉用户企业邮箱，然后自动登录或注册 APITable。登录或注册成功后会自动跳转到实际需要使用的 APITable 页面
 ## 使用
