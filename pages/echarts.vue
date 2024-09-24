@@ -325,6 +325,29 @@ export default {
         },
       });
     },
+    // async getSPUDailyShopSalesData(spu, startDate, endDate) {
+    //   const runtimeConfig = useRuntimeConfig();
+    //   const allDates = this.getDatesInRange(startDate, endDate);
+    //   let res = await Promise.all(allDates.map(m => (
+    //     $fetch(runtimeConfig.public.API_BASE_URL + '/bi/call-proc', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
+    //       },
+    //       body: {
+    //         name: 'CalculateShopBySPU',
+    //         params: [spu, m + ' 00:00:00', m + ' 23:59:59'],
+    //       },
+    //     })
+    //   )));
+    //   res = res.map(m => {
+    //     let value = m.result.reduce((r, v) => r + v[1], 0);
+    //     value = parseInt(value);
+    //     return value;
+    //   });
+    //   return { categoryData: allDates, valueData: res };
+    // },
     async getSPUDailySalesData(spu, startDate, endDate) {
       const runtimeConfig = useRuntimeConfig();
       const allDates = this.getDatesInRange(startDate, endDate);
@@ -336,15 +359,17 @@ export default {
             'Authorization': `Token ${runtimeConfig.public.DJANGO_API_TOKEN}`,
           },
           body: {
-            name: 'CalculateShopBySPU',
-            params: [spu, m + ' 00:00:00', m + ' 23:59:59'],
+            name: 'CalculateSPUPerformance',
+            params: [m + ' 00:00:00', m + ' 23:59:59'],
           },
         })
       )));
       res = res.map(m => {
-        let value = m.result.reduce((r, v) => r + v[1], 0);
-        value = parseInt(value);
-        return value;
+        const f = m.result.filter(f => f[0] == spu);
+        if (f.length > 0) {
+          return parseInt(f[0][1]);
+        }
+        return 0;
       });
       return { categoryData: allDates, valueData: res };
     },
